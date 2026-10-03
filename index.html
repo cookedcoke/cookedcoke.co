@@ -120,8 +120,9 @@
     .poll-in { padding: 26px; }
     .poll-in h2 { font-size: 26px; font-weight: 800; letter-spacing: -.02em; }
     .poll-in p { color: var(--muted); margin: 6px 0 18px; }
-    /* the Tally form is dark-themed and ignores our styles, so it gets a dark frame */
-    .poll-frame { background: #141414; border-radius: 10px; padding: 6px 14px; color-scheme: dark; }
+    /* The Tally form carries this site's theme (white, ink, brand red) and is
+       embedded with a transparent background, so it needs no frame of its own. */
+    .poll-frame { margin-inline: -4px; }
     .poll-frame iframe { display: block; width: 100%; border: 0; }
     .poll-close { position: absolute; top: 14px; right: 14px; width: 36px; height: 36px; border-radius: 50%;
                   border: 2px solid var(--rule); background: #fff; font: inherit; font-size: 18px; cursor: pointer; }
@@ -236,7 +237,7 @@
     <span>© 2026 Cooked Coke Social Enterprise · Reddam House</span>
     <nav>
       <a href="https://cookedcoke.org">About us</a>
-      <a href="mailto:contact@cookedcoke.xyz">Contact</a>
+      <a href="mailto:contact@cookedcoke.co">Contact</a>
     </nav>
   </footer>
 </div>
@@ -247,7 +248,7 @@
     <h2 id="pollTitle">What should we stock next?</h2>
     <p>One vote each. Answer it and you'll get a 10% code on the next page.</p>
     <div class="poll-frame">
-      <iframe data-tally-src="https://tally.so/embed/D4Dq6X?alignLeft=1&amp;transparentBackground=1&amp;dynamicHeight=1" loading="lazy" width="100%" height="260" frameborder="0" title="Cooked Coke community poll"></iframe>
+      <iframe data-tally-src="https://tally.so/embed/D4Dq6X?alignLeft=1&amp;hideTitle=1&amp;transparentBackground=1&amp;dynamicHeight=1" loading="lazy" width="100%" height="260" frameborder="0" title="Cooked Coke community poll"></iframe>
     </div>
   </div>
 </dialog>
