@@ -1,32 +1,22 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <script>
-    (function() {
-      const savedTheme = localStorage.getItem('theme_xyz') || 'dark';
-      document.documentElement.setAttribute('data-theme', savedTheme);
-      document.documentElement.classList.add('no-transition', 'js');
-    })();
-  </script>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
-  <meta name="description" content="The student-run cold case on Level 7. Soft drinks, sparkling water, noodles and snacks. Open at recess and lunch." />
-  <meta name="theme-color" content="#05070c" media="(prefers-color-scheme: dark)" />
-  <meta name="theme-color" content="#dce9f2" media="(prefers-color-scheme: light)" />
+  <meta name="description" content="Cold drinks and instant noodles, run by students on Level 7 at Reddam House. Open every recess, and at lunch every day except Tuesday." />
+  <meta name="theme-color" content="#ffffff" />
 
   <meta property="og:type" content="website" />
   <meta property="og:url" content="https://cookedcoke.co/" />
-  <meta property="og:title" content="Cooked Coke Co. · Level 7 Refreshment Hub" />
-  <meta property="og:description" content="The student-run cold case on Level 7. Soft drinks, sparkling water, noodles and snacks. Open at recess and lunch." />
+  <meta property="og:title" content="Cooked Coke Co · Level 7" />
+  <meta property="og:description" content="Cold drinks and instant noodles, run by students on Level 7. Open every recess, and at lunch every day except Tuesday." />
   <meta property="og:image" content="android-chrome-512x512.png" />
-
   <meta property="twitter:card" content="summary_large_image" />
-  <meta property="twitter:url" content="https://cookedcoke.co/" />
-  <meta property="twitter:title" content="Cooked Coke Co. · Level 7 Refreshment Hub" />
-  <meta property="twitter:description" content="The student-run cold case on Level 7. Soft drinks, sparkling water, noodles and snacks. Open at recess and lunch." />
+  <meta property="twitter:title" content="Cooked Coke Co · Level 7" />
+  <meta property="twitter:description" content="Cold drinks and instant noodles, run by students on Level 7." />
   <meta property="twitter:image" content="android-chrome-512x512.png" />
 
-  <title>Cooked Coke Co. · Level 7 Refreshment Hub</title>
+  <title>Cooked Coke Co · Cold drinks &amp; noodles on Level 7</title>
   <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
   <link rel="icon" type="image/png" sizes="32x32" href="favicon-32x32.png">
   <link rel="icon" type="image/png" sizes="16x16" href="favicon-16x16.png">
@@ -34,1443 +24,295 @@
   <link rel="manifest" href="site.webmanifest">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,400..900;1,400..900&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400..900&display=swap" rel="stylesheet">
   <style>
-    /* ══════════════════════════════════════════════════════════
-       COOKED COKE CO.
-       The whole page sits inside the cooler: fixed door frame and
-       glass in front, lit interior behind, shelves scrolling past.
-       ══════════════════════════════════════════════════════════ */
-
+    /* COOKED COKE CO — the menu board.
+       The buyer-facing site. The design is the menu, set with care: what we
+       sell, whether we're open, how to order. No imagery to wait on. */
     :root {
-      color-scheme: dark;
+      --ink: #141414; --paper: #ffffff; --muted: #636363; --rule: #e5e5e5; --soft: #f3f3f3;
+      --red: #fe0001;      /* brand primary */
+      --red-ink: #b30000;  /* brand small-text red, 7.2:1 on white */
+      --warn: #8a5600;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    html { -webkit-text-size-adjust: 100%; }
+    body { font-family: Montserrat, system-ui, sans-serif; color: var(--ink); background: var(--paper);
+           font-size: 16px; line-height: 1.5; -webkit-font-smoothing: antialiased; font-variant-numeric: tabular-nums; }
+    a { color: inherit; }
+    :focus-visible { outline: 3px solid var(--red); outline-offset: 3px; border-radius: 4px; }
+    .wrap { max-width: 1120px; margin: 0 auto; padding: 0 24px; }
+    .sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
 
-      /* the box */
-      --void:    #05070c;
-      --back-hi: #16243a;
-      --back-lo: #050a12;
-      --wall:    rgba(150,195,225,.20);
-      --shelf:   #0e1524;
-      --rail-s:  #141d2e;
-      --line:    #223049;
-      --frost:   #eaf5fc;
-      --haze:    #8298ae;
+    /* dev notice */
+    .devbar { background: var(--soft); border-bottom: 1px solid var(--rule); font-size: 13px; font-weight: 600; }
+    .devbar .wrap { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 6px 16px; padding-block: 10px; }
+    .devbar a { color: var(--warn); text-underline-offset: 3px; }
 
-      --chill:  #3fd8f7;
-      --coke:   #fe0001;  /* brand primary, per the brand sheet */
-      --warn:   #ffb01f;
+    header.top { display: flex; align-items: center; justify-content: space-between; gap: 16px;
+                 padding: 22px 0; border-bottom: 3px solid var(--ink); }
+    /* brand sheet: full lockup never narrower than 180px */
+    .logo { width: clamp(180px, 20vw, 230px); height: auto; display: block; }
 
-      /* light in the box */
-      --led:      #d8f2ff;
-      --led-glow: rgba(190,236,255,.55);
-      --glass-hi: rgba(255,255,255,.055);
-      --plate-hi: rgba(255,255,255,.28);
-      --plate-bd: rgba(206,234,248,.22);
-      --drop:     rgba(255,255,255,.5);
-      --cast:     rgba(0,0,0,.78);
+    .pill { display: inline-flex; align-items: center; gap: 10px; padding: 10px 16px; border-radius: 999px;
+            background: var(--soft); font-weight: 700; font-size: 13px; letter-spacing: .02em; }
+    .pill i { width: 9px; height: 9px; border-radius: 50%; background: #9a9a9a; flex: none; }
+    .pill.is-soon i { background: #c98a00; }
+    .pill.is-open { background: #e6f6ec; color: #05602e; }
+    .pill.is-open i { background: #0a9d55; box-shadow: 0 0 0 4px rgba(10,157,85,.18); }
 
-      /* frame */
-      --frame-w: clamp(9px, 1.5vw, 18px);
-      --frame:   linear-gradient(148deg, #46566e 0%, #131a26 38%, #33405420 55%, #2b3646 72%, #0d131c 100%);
-      --gasket:  #05080e;
+    .intro { display: grid; grid-template-columns: 1.5fr 1fr; gap: 48px; align-items: end;
+             padding: 56px 0 44px; border-bottom: 1px solid var(--rule); }
+    .intro h1 { font-size: clamp(2.3rem, 5.6vw, 4.4rem); font-weight: 800; line-height: 1; letter-spacing: -.035em; }
+    .intro h1 em { font-style: normal; color: var(--red); }
+    .intro p { margin-top: 18px; color: var(--muted); font-size: 18px; max-width: 40ch; }
+    .ctas { display: grid; gap: 10px; }
+    .btn { display: flex; justify-content: space-between; align-items: center; gap: 12px; width: 100%;
+           padding: 18px 22px; border: 2px solid var(--ink); border-radius: 8px; background: none; cursor: pointer;
+           font: inherit; font-weight: 700; font-size: 17px; color: var(--ink); text-decoration: none; text-align: left;
+           transition: transform .15s; }
+    .btn:hover { transform: translateY(-2px); }
+    .btn small { font-weight: 500; font-size: 13px; opacity: .8; }
+    .btn--red { background: var(--red); border-color: var(--red); color: #fff; }
+    .btn[disabled] { opacity: .45; cursor: default; transform: none; }
 
-      /* product material */
-      --spec-hi: rgba(255,255,255,.34);
-      --spec-md: rgba(255,255,255,.07);
-      --spec-lo: rgba(0,0,0,.46);
-      --backfill: #101827;
+    /* the board */
+    .board { display: grid; grid-template-columns: 1fr 1fr; gap: 56px; padding: 52px 0 24px; }
+    .group + .group { margin-top: 40px; }
+    .group h2 { display: flex; justify-content: space-between; align-items: baseline; gap: 12px;
+                font-size: 26px; font-weight: 800; letter-spacing: -.02em;
+                border-bottom: 3px solid var(--ink); padding-bottom: 8px; margin-bottom: 6px; }
+    .group h2 small { font-size: 15px; font-weight: 700; color: var(--red-ink); letter-spacing: 0; }
+    .group .note { color: var(--muted); font-size: 14px; }
+    .items { list-style: none; }
+    .items li { display: flex; align-items: baseline; gap: 10px; padding: 11px 0; border-bottom: 1px solid var(--rule); font-size: 17px; }
+    .items b { font-weight: 700; display: inline-flex; align-items: center; gap: 9px; }
+    .items b i { width: 10px; height: 10px; border-radius: 50%; flex: none; transform: translateY(-1px); }
+    .items .lead { flex: 1; border-bottom: 2px dotted #cfcfcf; transform: translateY(-5px); }
+    .items em { font-style: normal; color: var(--muted); font-size: 14px; font-weight: 600; white-space: nowrap; }
+    .flav { list-style: none; columns: 2; column-gap: 28px; padding-top: 6px; }
+    .flav li { padding: 8px 0; border-bottom: 1px solid var(--rule); break-inside: avoid; font-size: 16px; font-weight: 600; }
 
-      /* shelf accents, from what is actually on them */
-      --sh-01: #ff2438;  /* classics */
-      --sh-02: #ff6f9c;  /* Chi Forest — white peach */
-      --sh-03: #2bb3e8;  /* tea and Yoosh */
-      --sh-04: #ffb01f;  /* noodles and snacks */
+    /* hours + tokens */
+    .facts { display: grid; grid-template-columns: 1.3fr 1fr; gap: 24px; padding: 32px 0 64px; align-items: start; }
+    .card { border: 2px solid var(--ink); border-radius: 12px; padding: 26px; }
+    .card h3 { font-size: 13px; font-weight: 800; text-transform: uppercase; letter-spacing: .14em; margin-bottom: 14px; }
+    .hours { width: 100%; border-collapse: collapse; font-size: 15px; }
+    .hours th, .hours td { padding: 10px 8px; text-align: center; border-bottom: 1px solid var(--rule); }
+    .hours thead th { font-size: 12px; font-weight: 800; text-transform: uppercase; letter-spacing: .1em; }
+    .hours thead small { display: block; font-weight: 600; letter-spacing: 0; text-transform: none; color: var(--muted); font-size: 12px; }
+    .hours tbody th { text-align: left; font-weight: 700; }
+    .hours .y { font-weight: 700; }
+    .hours .n { color: #bbb; }
+    .hours tr.today { background: #fff4f4; }
+    .hours tr.today th { box-shadow: inset 4px 0 0 var(--red); padding-left: 14px; }
+    .hours caption { caption-side: bottom; text-align: left; padding-top: 12px; color: var(--muted); font-size: 13px; }
+    .token { display: flex; gap: 20px; align-items: center; }
+    .coin { flex: none; width: 92px; height: 92px; border-radius: 50%; display: grid; place-items: center;
+            background: var(--red); color: #fff; font-weight: 900; font-size: 26px;
+            box-shadow: inset 0 0 0 6px rgba(255,255,255,.18), 0 10px 22px -10px var(--red); }
+    .token strong { display: block; font-size: 22px; font-weight: 800; line-height: 1.25; margin-bottom: 4px; }
 
-      /* the four classics carry their own brand colour, mini included.
-         Prefixed so they don't collide with --coke, the action red. */
-      --br-coke:   #ee1c25;
-      --br-fanta:  #ff7a00;
-      --br-sprite: #00a94f;
-      --br-solo:   #ffc300;
+    footer { border-top: 3px solid var(--ink); padding: 22px 0 40px; display: flex; justify-content: space-between;
+             flex-wrap: wrap; gap: 12px; font-size: 14px; color: var(--muted); }
+    footer nav { display: flex; gap: 20px; flex-wrap: wrap; }
 
-      --display: 'Montserrat', system-ui, sans-serif;
-      --body: 'Montserrat', system-ui, sans-serif;
-      --mono: 'Montserrat', system-ui, sans-serif;
-
-      --gutter: clamp(16px, 3.4vw, 38px);
-      --max: 1140px;
-    }
-
-    /* doors open, lights on, daylight in the room */
-    [data-theme="light"] {
-      color-scheme: light;
-      --void:    #dce9f2;
-      --back-hi: #ffffff;
-      --back-lo: #cbdde9;
-      --wall:    rgba(70,110,140,.16);
-      --shelf:   #ffffff;
-      --rail-s:  #eef5fa;
-      --line:    #b9cfdf;
-      --frost:   #06111f;
-      --haze:    #4d6579;
-
-      --chill:  #0079a0;
-      --coke:   #b30000;  /* the brand's small-text red, for light backgrounds */
-      --warn:   #8a5600;
-
-      --led:      #ffffff;
-      --led-glow: rgba(120,190,220,.5);
-      --glass-hi: rgba(255,255,255,.5);
-      --plate-hi: rgba(255,255,255,.85);
-      --plate-bd: rgba(120,165,195,.3);
-      --drop:     rgba(255,255,255,.9);
-      --cast:     rgba(20,50,75,.26);
-
-      --frame:   linear-gradient(148deg, #cfdae6 0%, #7e8fa4 38%, #b9c6d6 55%, #8494a8 72%, #5d6b7e 100%);
-      --gasket:  #7d8ea1;
-
-      --spec-hi: rgba(255,255,255,.74);
-      --spec-md: rgba(255,255,255,.28);
-      --spec-lo: rgba(0,0,0,.24);
-      --backfill: #93a8b8;
-    }
-
-    .no-transition *, .no-transition *::before, .no-transition *::after {
-      transition: none !important;
-      animation: none !important;
-    }
-
-    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
-    html { scroll-behavior: smooth; -webkit-text-size-adjust: 100%; }
-
-    body {
-      background: var(--void);
-      color: var(--frost);
-      font-family: var(--body);
-      font-size: 17px;
-      line-height: 1.55;
-      -webkit-font-smoothing: antialiased;
-      min-height: 100vh;
-      display: flex;
-      flex-direction: column;
-      overflow-x: hidden;
-      transition: background-color .4s ease, color .4s ease;
-    }
-
-    ::selection { background: var(--chill); color: var(--void); }
-    :focus-visible { outline: 2px solid var(--chill); outline-offset: 3px; border-radius: 3px; }
-
-    /* Montserrat's default figures are proportional; these places line up
-       numbers in columns, so ask for tabular ones. */
-    .readout, .timetable, .fineprint, .code-value, .bay__count, .log-date {
-      font-variant-numeric: tabular-nums;
-    }
-
-    /* ═══ THE UNIT ═══════════════════════════════════════════ */
-
-    /* lit interior: back panel, side walls in perspective, cold pooling low */
-    .interior {
-      position: fixed;
-      inset: 0;
-      z-index: 0;
-      pointer-events: none;
-      background: linear-gradient(180deg, var(--back-hi) 0%, var(--back-lo) 55%, var(--void) 100%);
-    }
-    .interior::before {
-      content: '';
-      position: absolute;
-      inset: 0;
-      background:
-        linear-gradient(90deg,  var(--wall) 0%, color-mix(in srgb, var(--wall) 25%, transparent) 6%, transparent 15%),
-        linear-gradient(270deg, var(--wall) 0%, color-mix(in srgb, var(--wall) 25%, transparent) 6%, transparent 15%);
-    }
-    .interior::after {
-      content: '';
-      position: absolute;
-      inset: auto 0 0 0;
-      height: 46vh;
-      background: radial-gradient(130% 100% at 50% 125%, var(--led-glow), transparent 68%);
-      opacity: .5;
-    }
-
-    /* the glass: specular streaks, condensation, frost in the corners */
-    .glass {
-      position: fixed;
-      inset: 0;
-      z-index: 900;
-      pointer-events: none;
-      background: linear-gradient(102deg,
-        transparent 7%, var(--glass-hi) 19%, transparent 31%,
-        transparent 57%, var(--glass-hi) 69%, transparent 81%);
-    }
-    .glass::before {
-      content: '';
-      position: absolute;
-      inset: 0;
-      background-image: radial-gradient(circle at 50% 50%, var(--drop) 0 1px, transparent 1.5px);
-      background-size: 39px 47px;
-      opacity: .11;
-    }
-    .glass::after {
-      content: '';
-      position: absolute;
-      inset: 0;
-      background:
-        radial-gradient(58% 38% at 0% 0%,     color-mix(in srgb, var(--led) 18%, transparent), transparent 70%),
-        radial-gradient(58% 38% at 100% 0%,   color-mix(in srgb, var(--led) 18%, transparent), transparent 70%),
-        radial-gradient(66% 42% at 0% 100%,   color-mix(in srgb, var(--led) 14%, transparent), transparent 70%),
-        radial-gradient(66% 42% at 100% 100%, color-mix(in srgb, var(--led) 14%, transparent), transparent 70%);
-    }
-    /* white frost over a dark case reads as frost; over a light one it just
-       fogs the stock, so pull both overlays back when the lights are on */
-    [data-theme="light"] .glass::before { opacity: .05; }
-    [data-theme="light"] .glass::after  { opacity: .3; }
-
-    /* the door frame and its rubber gasket */
-    .frame {
-      position: fixed;
-      inset: 0;
-      z-index: 950;
-      pointer-events: none;
-      border: var(--frame-w) solid;
-      border-image: var(--frame) 1;
-    }
-    .frame::after {
-      content: '';
-      position: absolute;
-      inset: 0;
-      box-shadow:
-        inset 0 0 0 2px var(--gasket),
-        inset 0 0 34px rgba(0,0,0,.55);
-    }
-    [data-theme="light"] .frame::after {
-      box-shadow: inset 0 0 0 2px var(--gasket), inset 0 0 34px rgba(70,110,140,.22);
-    }
-
-    /* ═══ DEV NOTICE ═══ */
-    .devbar {
-      position: relative;
-      z-index: 901;
-      background: var(--rail-s);
-      border-bottom: 1px solid var(--line);
-      box-shadow: inset 0 2px 0 var(--warn);
-      margin: var(--frame-w) var(--frame-w) 0;
-    }
-    .devbar-inner {
-      max-width: var(--max);
-      margin: 0 auto;
-      padding: 11px var(--gutter);
-      display: flex;
-      align-items: center;
-      gap: 10px 16px;
-      flex-wrap: wrap;
-      font-family: var(--mono);
-      font-size: 10.5px;
-      font-weight: 500;
-      text-transform: uppercase;
-      letter-spacing: .13em;
-    }
-    .devbar p { color: var(--frost); }
-    .devbar a {
-      color: var(--warn);
-      text-decoration: underline;
-      text-underline-offset: 3px;
-      text-decoration-thickness: 1px;
-      margin-left: auto;
-      white-space: nowrap;
-    }
-    .devbar a:hover { color: var(--frost); }
-
-    /* the case light switch, on the header panel */
-    .lightswitch {
-      margin-left: auto;
-      flex: 0 0 auto;
-      width: 38px;
-      height: 38px;
-      border-radius: 50%;
-      border: 1px solid rgba(10,25,40,.18);
-      background: rgba(255,255,255,.6);
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      transition: background-color .2s, border-color .2s;
-    }
-    .lightswitch:hover { background: #fff; border-color: rgba(10,25,40,.4); }
-    /* the panel is always lit, so force both icons dark — the white moon
-       would otherwise vanish into it */
-    .lightswitch img { height: 17px; width: auto; filter: brightness(0); opacity: .72; }
-    .lightswitch:hover img { opacity: 1; }
-    /* the fascia is always lit, so the icons never follow the page theme */
-    .theme-icon-dark { display: none; }
-    [data-theme="dark"] .theme-icon-light { display: none; }
-    [data-theme="dark"] .theme-icon-dark { display: block; }
-
-    main { position: relative; z-index: 1; flex: 1; padding: 0 var(--frame-w); }
-    footer { position: relative; z-index: 1; margin: 0 var(--frame-w); }
-    .wrap { width: 100%; max-width: var(--max); margin: 0 auto; padding-inline: var(--gutter); }
-
-    .eyebrow {
-      font-family: var(--mono);
-      font-size: 10.5px;
-      font-weight: 500;
-      text-transform: uppercase;
-      letter-spacing: .17em;
-      color: var(--haze);
-      display: block;
-    }
-
-    /* ═══ FASCIA — the cooler's lit header panel ═══
-       A branded lightbox, so it stays illuminated in both themes. */
-    .fascia {
-      position: relative;
-      z-index: 2;
-      margin: 0 var(--frame-w);
-      overflow: hidden;
-      color: #08131f;
-      background: linear-gradient(180deg, #fcfeff 0%, #e8f4fb 44%, #c2d8e8 100%);
-      /* the steel divider between the header panel and the door below it —
-         without it the lit panel dissolves into a light interior */
-      border-bottom: 3px solid var(--gasket);
-      box-shadow: 0 24px 48px -26px rgba(0,0,0,.9);
-    }
-    /* the tube behind the panel, and the shadow it throws into the case */
-    .fascia::before {
-      content: '';
-      position: absolute; inset: 0 0 auto 0; height: 3px;
-      background: linear-gradient(90deg, transparent, #fff 18%, #fff 82%, transparent);
-    }
-    .fascia::after {
-      content: '';
-      position: absolute; inset: auto 0 0 0; height: 5px;
-      background: linear-gradient(180deg, rgba(4,12,22,.34), transparent);
-    }
-    .fascia__inner {
-      padding-block: clamp(20px, 3.6vw, 36px);
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: clamp(16px, 3vw, 44px);
-      flex-wrap: wrap;
-    }
-    .fascia__brand {
-      display: flex;
-      align-items: center;
-      min-width: 0;
-    }
-    /* The official lockup. The brand sheet sets a 180px minimum width for the
-       full logo — below that it must be the mark alone — so that is the floor. */
-    .fascia__logo {
-      display: block;
-      width: clamp(180px, 26vw, 340px);
-      height: auto;
-    }
-
-    /* the readout, printed straight onto the lit panel */
-    .fascia__right {
-      display: flex;
-      align-items: center;
-      gap: clamp(14px, 2.4vw, 30px);
-    }
-    .readout {
-      display: grid;
-      grid-template-columns: auto auto;
-      align-items: baseline;
-      gap: 5px clamp(12px, 1.8vw, 24px);
-      font-family: var(--mono);
-    }
-    .readout dt {
-      font-size: 9px;
-      font-weight: 500;
-      letter-spacing: .18em;
-      text-transform: uppercase;
-      color: #5d7488;
-      white-space: nowrap;
-    }
-    .readout dd {
-      font-size: 11px;
-      font-weight: 600;
-      letter-spacing: .05em;
-      text-transform: uppercase;
-      color: #08131f;
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      white-space: nowrap;
-    }
-    /* the panel is always white, so state colours are fixed rather than themed */
-    .readout .dot { width: 8px; height: 8px; border-radius: 50%; background: #90a5b6; flex: 0 0 auto; }
-    .readout[data-state="open"] .dot { background: #0a9d55; animation: ping 2.4s ease-out infinite; }
-    .readout[data-state="open"] dd { color: #067a42; }
-    .readout[data-state="soon"] .dot { background: #c07600; }
-    @keyframes ping {
-      0%   { box-shadow: 0 0 0 0 rgba(10,157,85,.5); }
-      70%  { box-shadow: 0 0 0 8px transparent; }
-      100% { box-shadow: 0 0 0 0 transparent; }
-    }
-
-    /* appliance controls, sitting on the interior below the panel */
-    .ctas {
-      position: relative;
-      z-index: 1;
-      display: flex;
-      flex-wrap: wrap;
-      gap: 10px;
-      padding-block: clamp(20px, 3.4vw, 34px) 0;
-    }
-
-    .btn {
-      font-family: var(--mono);
-      font-size: 12px;
-      font-weight: 600;
-      text-transform: uppercase;
-      letter-spacing: .1em;
-      text-decoration: none;
-      padding: 15px 24px;
-      border-radius: 4px;
-      border: 1px solid transparent;
-      cursor: pointer;
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      gap: 10px;
-      transition: transform .18s ease, background-color .2s, border-color .2s, color .2s;
-    }
-    .btn-primary { background: var(--coke); color: #fff; }
-    .btn-primary:hover { transform: translateY(-2px); background: color-mix(in srgb, var(--coke) 86%, #fff); }
-    .btn-secondary { background: color-mix(in srgb, var(--shelf) 55%, transparent); color: var(--frost); border-color: var(--line); }
-    .btn-secondary:hover { transform: translateY(-2px); border-color: var(--chill); color: var(--chill); }
-    .btn[aria-disabled="true"] { opacity: .4; pointer-events: none; }
-
-    /* the fascia already divides; don't stack a section pad on top of it */
-    #catalog { padding-block-start: 0; }
-
-    /* ═══ THE SHELVES ═══════════════════════════════════════ */
-    .case { margin-top: clamp(14px, 2vw, 24px); }
-
-    .bay {
-      position: relative;
-      padding-top: 30px;
-      --tag-h: 42px;
-      --shot-h: clamp(126px, 17vw, 178px);
-    }
-
-    /* the strip light under the shelf above */
-    .bay__led {
-      position: absolute;
-      top: 0; left: 0; right: 0;
-      height: 2px;
-      background: linear-gradient(90deg, transparent, var(--led) 14%, #fff 50%, var(--led) 86%, transparent);
-      box-shadow: 0 0 16px 2px var(--led-glow);
-      opacity: 0;
-      transition: opacity .8s ease;
-    }
-    .bay__led::after {
-      content: '';
-      position: absolute;
-      top: 2px; left: -6%; right: -6%;
-      height: 220px;
-      background: radial-gradient(78% 100% at 50% 0%,
-        color-mix(in srgb, var(--tint) 17%, transparent), transparent 72%);
-      pointer-events: none;
-    }
-    .bay.lit .bay__led { opacity: 1; }
-    html:not(.js) .bay__led { opacity: 1; }
-
-    /* the glass shelf the stock stands on; its front edge carries the tickets */
-    .bay__plate {
-      position: absolute;
-      left: 0; right: 0; bottom: 0;
-      height: var(--tag-h);
-      z-index: 0;
-      clip-path: polygon(1.2% 0, 98.8% 0, 100% 100%, 0 100%);
-      background: linear-gradient(180deg,
-        var(--plate-bd) 0%,
-        color-mix(in srgb, var(--plate-bd) 30%, transparent) 34%,
-        var(--plate-hi) 74%,
-        color-mix(in srgb, var(--plate-bd) 70%, transparent) 100%);
-      box-shadow: 0 18px 32px -14px var(--cast), inset 0 1px 0 rgba(255,255,255,.35);
-    }
-
-    .bay__rail {
-      position: relative;
-      z-index: 2;
-      display: flex;
-      align-items: baseline;
-      gap: 14px;
-      flex-wrap: wrap;
-    }
-    .bay__no {
-      font-family: var(--mono);
-      font-size: 10px;
-      font-weight: 600;
-      letter-spacing: .18em;
-      text-transform: uppercase;
-      color: var(--tint);
-    }
-    .bay__name {
-      font-family: var(--display);
-      font-weight: 800;
-      text-transform: uppercase;
-      font-size: clamp(1.3rem, 3.4vw, 2rem);
-      line-height: 1;
-      letter-spacing: -.015em;
-    }
-    .bay__count {
-      font-family: var(--mono);
-      font-size: 10px;
-      letter-spacing: .14em;
-      text-transform: uppercase;
-      color: var(--haze);
-      margin-left: auto;
-    }
-    .bay__note {
-      position: relative;
-      z-index: 2;
-      font-size: 15px;
-      color: var(--haze);
-      margin-top: 8px;
-      max-width: 52ch;
-    }
-
-    .deck {
-      position: relative;
-      z-index: 1;
-      display: flex;
-      align-items: flex-end;
-      /* stock on a real shelf is pushed up against itself */
-      gap: clamp(2px, 0.5vw, 7px);
-      margin-top: 22px;
-      padding: 12px 2px 0;
-      overflow-x: auto;
-      overflow-y: hidden;
-      scroll-snap-type: x proximity;
-      scrollbar-width: none;
-    }
-    .deck::-webkit-scrollbar { display: none; }
-
-    .facing {
-      flex: 0 0 auto;
-      width: clamp(86px, 9.4vw, 128px);
-      scroll-snap-align: start;
-      cursor: default;
-      display: flex;
-      flex-direction: column;
-      background: none;
-      border: 0;
-      padding: 0;
-      font: inherit;
-      color: inherit;
-      text-align: center;
-    }
-
-    /* a mini takes less shelf room than its full-size counterpart */
-    .facing[data-form="mini"] { width: clamp(60px, 6.2vw, 84px); }
-
-    /* the product itself: photo when there is one, drawn stand-in until then */
-    .shot {
-      position: relative;
-      height: var(--shot-h);
-      display: block;
-      transition: transform .3s cubic-bezier(.2,.7,.3,1);
-    }
-    /* contact shadow where it meets the glass */
-    .shot::after {
-      content: '';
-      position: absolute;
-      bottom: -2px; left: 14%; right: 14%;
-      height: 12px;
-      background: radial-gradient(50% 50% at 50% 50%, var(--cast), transparent 72%);
-      z-index: 0;
-    }
-    .facing:hover .shot, .facing:focus-visible .shot { transform: translateY(-7px); }
-
-    .shot img {
-      position: relative;
-      z-index: 1;
-      display: block;
-      width: 100%;
-      height: 100%;
-      object-fit: contain;
-      object-position: center bottom;
-      filter: drop-shadow(0 12px 14px rgba(0,0,0,.42));
-    }
-    /* The drawn stand-in is the default so slots with no photo at all — the
-       unmarked cans — still render. JS adds .has-photo only once a real image
-       has actually loaded, and only then does the stand-in step aside. */
-    .shot:not(.has-photo) img { visibility: hidden; }
-    .shot.has-photo i { display: none; }
-
-    .shot i {
-      position: absolute;
-      z-index: 1;
-      left: 0; right: 0; bottom: 0;
-      margin-inline: auto;
-      --fill: color-mix(in oklab, var(--tint) calc(100% - var(--fade, 0%)), var(--backfill));
-      background:
-        linear-gradient(99deg,
-          var(--spec-lo) 0%, transparent 9%,
-          var(--spec-hi) 24%, var(--spec-md) 34%,
-          transparent 52%, rgba(0,0,0,.12) 74%,
-          var(--spec-lo) 100%),
-        var(--fill);
-      box-shadow: 0 16px 22px -14px var(--cast);
-    }
-
-    .facing[data-form="can"] i    { height: 88%; width: 68%; border-radius: 10px / 16px; }
-    /* the minis are a slim can: barely shorter than a regular, much narrower */
-    .facing[data-form="mini"] i   { height: 80%; width: 40%; border-radius: 8px / 15px; }
-    /* a noodle bowl — a cylinder with the bottom edge chamfered off */
-    .facing[data-form="bowl"] i {
-      height: 64%;
-      width: 94%;
-      border-radius: 0;
-      box-shadow: none;
-      clip-path: polygon(
-        0% 0%, 100% 0%, 100% 84%,
-        92% 96%, 80% 100%, 20% 100%, 8% 96%,
-        0% 84%
-      );
-    }
-    .facing[data-form="bottle"] i {
-      height: 100%;
-      width: 80%;
-      clip-path: polygon(
-        38% 0%, 62% 0%, 62% 5%, 64% 9%, 64% 15%,
-        76% 24%, 82% 34%, 84% 44%, 84% 95%, 79% 100%,
-        21% 100%, 16% 95%, 16% 44%, 18% 34%, 24% 24%, 36% 15%, 36% 9%, 38% 5%
-      );
-      box-shadow: none;
-    }
-    /* a sealed bag: crimped top and bottom, so it reads apart from a bowl */
-    .facing[data-form="pack"] i {
-      height: 74%;
-      width: 92%;
-      border-radius: 0;
-      clip-path: polygon(
-        0% 7%, 13% 0%, 87% 0%, 100% 7%,
-        100% 93%, 87% 100%, 13% 100%, 0% 93%
-      );
-    }
-    .facing[data-form="round"] i  { height: 52%; aspect-ratio: 1; width: auto; border-radius: 50%; }
-
-    .facing[data-form="can"] i::before,
-    .facing[data-form="mini"] i::before {
-      content: '';
-      position: absolute;
-      inset: 3px 7px auto 7px;
-      height: 8px;
-      border-radius: 50%;
-      background: color-mix(in srgb, var(--frost) 34%, transparent);
-    }
-    .facing[data-form="bottle"] i::before {
-      content: '';
-      position: absolute;
-      inset: 0 36% auto 36%;
-      height: 14px;
-      background: color-mix(in srgb, var(--frost) 32%, transparent);
-    }
-    /* the lid rim sits right across the top of the bowl */
-    .facing[data-form="bowl"] i::before {
-      content: '';
-      position: absolute;
-      inset: 2px 3px auto 3px;
-      height: 11px;
-      border-radius: 50%;
-      background: color-mix(in srgb, var(--frost) 30%, transparent);
-    }
-
-    /* The printed label band. This is what makes a drawn stand-in read as a
-       product rather than a coloured shape — a real can is a coloured body
-       with a printed wrap, so give it one. Decorative: the shelf ticket below
-       is the accessible name, so this is hidden from assistive tech. */
-    .shot i::after {
-      content: attr(data-name);
-      position: absolute;
-      left: 0;
-      right: 0;
-      top: 38%;
-      padding: 5px 8%;
-      font-family: var(--display);
-      font-size: 7.5px;
-      font-weight: 800;
-      line-height: 1.2;
-      letter-spacing: .01em;
-      text-align: center;
-      text-transform: uppercase;
-      color: #fff;
-      text-shadow: 0 1px 1px rgba(0,0,0,.4);
-      background: rgba(255,255,255,.16);
-      border-top: 1px solid rgba(255,255,255,.26);
-      border-bottom: 1px solid rgba(0,0,0,.14);
-      overflow: hidden;
-    }
-    /* bags and bowls carry their print lower and wider than a can does */
-    .facing[data-form="pack"] i::after,
-    .facing[data-form="bowl"] i::after { top: 30%; font-size: 8px; }
-    .facing[data-form="mini"] i::after { top: 34%; font-size: 6px; padding: 4px 4%; }
-    .facing[data-form="round"] i::after { display: none; }
-    /* the unmarked cans are unlabelled by design */
-    .facing--mystery i::after { display: none; }
-    /* a real photo replaces the whole stand-in, band included */
-    .shot.has-photo i::after { display: none; }
-
-    /* the shelf-edge ticket */
-    .tag {
-      position: relative;
-      z-index: 2;
-      height: var(--tag-h);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-family: var(--mono);
-      font-size: 9px;
-      font-weight: 600;
-      letter-spacing: .07em;
-      text-transform: uppercase;
-      color: var(--frost);
-      line-height: 1.35;
-      padding: 0 2px;
-      text-shadow: 0 1px 2px rgba(0,0,0,.55);
-    }
-    [data-theme="light"] .tag { text-shadow: 0 1px 0 rgba(255,255,255,.9); }
-    .facing:hover .tag { color: var(--tint); }
-
-    /* ═══ THE UNMARKED CANS ═══ */
-    .facing--mystery { cursor: pointer; }
-    .facing--mystery i {
-      --fill: none;
-      background:
-        radial-gradient(circle at 30% 22%, rgba(255,255,255,.5) 0 1px, transparent 1.6px) 0 0 / 13px 15px,
-        linear-gradient(99deg,
-          rgba(0,0,0,.34) 0%, transparent 10%,
-          rgba(255,255,255,.6) 26%, rgba(255,255,255,.22) 40%,
-          transparent 58%, rgba(0,0,0,.3) 100%),
-        linear-gradient(180deg, #cfe5f1 0%, #93b2c6 55%, #6d8da0 100%);
-      background-color: #a8c4d4;
-    }
-    .facing--mystery .shot::before {
-      content: '?';
-      position: absolute;
-      z-index: 2;
-      left: 0; right: 0;
-      top: 42%;
-      font-family: var(--display);
-      font-weight: 900;
-      font-size: clamp(20px, 3vw, 30px);
-      color: rgba(20,45,65,.5);
-      text-shadow: 0 1px 0 rgba(255,255,255,.5);
-    }
-    .facing--mystery .tag { color: var(--chill); }
-    /* this one navigates away instead of opening a panel — say so */
-    .facing--order .shot::before { content: '\2197'; }
-    .facing--order .tag { color: var(--coke); }
-    .facing--order { text-decoration: none; }
-    .facing--mystery.is-done { cursor: default; }
-    .facing--mystery.is-done .shot { opacity: .45; }
-    .facing--mystery.is-done .shot i { animation: none; }
-    .facing--mystery.is-done .tag { color: var(--haze); }
-    .facing--mystery .shot i { animation: shimmer 5.5s ease-in-out infinite; }
-    @keyframes shimmer {
-      0%, 88%, 100% { filter: brightness(1); }
-      94%           { filter: brightness(1.22); }
-    }
-
-    /* ═══ REVEAL DIALOG ═══ */
-    dialog.reveal {
-      border: 1px solid var(--line);
-      border-radius: 10px;
-      background: var(--shelf);
-      color: var(--frost);
-      padding: 0;
-      /* the global margin reset would otherwise pin the modal to the corner */
-      margin: auto;
-      width: min(480px, calc(100vw - 2.5rem));
-      box-shadow: 0 40px 80px -30px #000;
-    }
-    dialog.reveal::backdrop {
-      background: rgba(3, 8, 14, .68);
-      backdrop-filter: blur(4px);
-    }
-    .reveal__inner { padding: clamp(22px, 4vw, 32px); }
-    .reveal__inner h2 {
-      font-family: var(--display);
-      font-weight: 800;
-      text-transform: uppercase;
-      font-size: clamp(1.35rem, 4vw, 1.9rem);
-      line-height: .96;
-      letter-spacing: -.018em;
-      margin: 10px 0 12px;
-    }
-    .reveal__inner p { color: var(--haze); font-size: 15px; }
-    .reveal__inner .btn { width: 100%; margin-top: 20px; }
-    .reveal__close {
-      position: absolute;
-      top: 12px; right: 12px;
-      width: 30px; height: 30px;
-      border-radius: 50%;
-      border: 1px solid var(--line);
-      background: var(--rail-s);
-      color: var(--haze);
-      font: inherit;
-      font-size: 15px;
-      line-height: 1;
-      cursor: pointer;
-    }
-    .reveal__close:hover { color: var(--frost); }
-    /* ═══ TIMETABLE — lives only inside the Hours popup now ═══ */
-    .timetable {
-      width: 100%;
-      border-collapse: collapse;
-      font-family: var(--mono);
-      font-size: 10px;
-      letter-spacing: .04em;
-      margin-top: 18px;
-    }
-    .timetable th {
-      text-align: left;
-      padding: 8px 6px;
-      font-weight: 500;
-      font-size: 8.5px;
-      letter-spacing: .16em;
-      text-transform: uppercase;
-      color: var(--haze);
-      border-bottom: 1px solid var(--line);
-      white-space: nowrap;
-    }
-    .timetable th + th, .timetable td + td { text-align: center; }
-    .timetable td {
-      padding: 10px 6px;
-      border-bottom: 1px solid var(--line);
-      text-transform: uppercase;
-      color: var(--haze);
-      white-space: nowrap;
-    }
-    .timetable td:first-child { color: var(--frost); font-weight: 500; }
-    .timetable .yes { color: var(--chill); }
-    .timetable .no  { opacity: .35; }
-    .timetable tr[data-today] td { background: color-mix(in srgb, var(--chill) 10%, transparent); }
-    .timetable tr[data-today] td:first-child { box-shadow: inset 2px 0 0 var(--chill); }
-    .today-flag { display: none; font-size: 7.5px; letter-spacing: .14em; color: var(--chill); margin-left: 6px; }
-    tr[data-today] .today-flag { display: inline; }
-    .fineprint {
-      margin-top: 14px;
-      font-family: var(--mono);
-      font-size: 9px;
-      letter-spacing: .06em;
-      line-height: 1.8;
-      color: var(--haze);
-    }
-
-    section { padding-block: clamp(48px, 7vw, 88px); }
-
-    /* ═══ TOKEN — lives only inside the Tokens popup now ═══ */
-    .token-rate {
-      font-family: var(--mono);
-      font-size: 11px;
-      font-weight: 600;
-      letter-spacing: .1em;
-      text-transform: uppercase;
-      color: var(--frost);
-      margin-top: 18px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 10px;
-      border: 1px solid var(--line);
-      border-radius: 4px;
-      padding: 12px 16px;
-    }
-    .token-rate em { font-style: normal; color: var(--coke); }
-    .coin {
-      width: clamp(96px, 26vw, 124px);
-      aspect-ratio: 1;
-      border-radius: 50%;
-      display: grid;
-      place-items: center;
-      position: relative;
-      margin: 20px auto 22px;
-      background:
-        conic-gradient(from 210deg,
-          color-mix(in srgb, var(--coke) 62%, #000) 0deg,
-          color-mix(in srgb, var(--coke) 100%, #fff) 70deg,
-          color-mix(in srgb, var(--coke) 48%, #000) 150deg,
-          color-mix(in srgb, var(--coke) 92%, #fff) 250deg,
-          color-mix(in srgb, var(--coke) 58%, #000) 360deg);
-      box-shadow: 0 18px 34px -16px var(--coke), inset 0 0 0 1px rgba(255,255,255,.18);
-    }
-    .coin::before {
-      content: '';
-      position: absolute;
-      inset: 9px;
-      border-radius: 50%;
-      border: 1px dashed rgba(255,255,255,.32);
-    }
-    .coin span {
-      font-family: var(--display);
-      font-weight: 900;
-      font-size: clamp(24px, 7vw, 32px);
-      color: #fff;
-      text-shadow: 0 1px 0 rgba(0,0,0,.35);
-    }
-    .coin small {
-      position: absolute;
-      bottom: 21%;
-      font-family: var(--mono);
-      font-size: 7px;
-      letter-spacing: .2em;
-      text-transform: uppercase;
-      color: rgba(255,255,255,.72);
-    }
-
-    /* ═══ VOTE ═══ */
-    #vote-view { display: none; }
-    .poll-shell {
-      max-width: 620px;
-      margin: clamp(40px, 8vw, 84px) auto;
-      border: 1px solid var(--line);
-      border-radius: 8px;
-      background: var(--shelf);
-      padding: clamp(24px, 5vw, 40px);
-    }
-    .poll-shell h2 {
-      font-family: var(--display);
-      font-weight: 800;
-      text-transform: uppercase;
-      font-size: clamp(1.4rem, 4vw, 2rem);
-      line-height: .98;
-      margin: 8px 0;
-    }
-    .poll-shell > p { color: var(--haze); font-size: 15px; margin-bottom: 22px; }
-    /* The Tally form is dark-themed and does not follow our toggle, so this
-       inset stays dark in both themes — a lit readout in the case. */
-    .poll-frame {
-      background: #0e1524;
-      border: 1px solid #223049;
-      border-radius: 6px;
-      padding: 6px 14px;
-      color-scheme: dark;
-    }
+    /* the poll */
+    dialog.poll { margin: auto; border: 0; border-radius: 16px; padding: 0; width: min(560px, calc(100vw - 2rem));
+                  box-shadow: 0 40px 80px -30px rgba(0,0,0,.6); }
+    dialog.poll::backdrop { background: rgba(20,20,20,.55); }
+    .poll-in { padding: 26px; }
+    .poll-in h2 { font-size: 26px; font-weight: 800; letter-spacing: -.02em; }
+    .poll-in p { color: var(--muted); margin: 6px 0 18px; }
+    /* the Tally form is dark-themed and ignores our styles, so it gets a dark frame */
+    .poll-frame { background: #141414; border-radius: 10px; padding: 6px 14px; color-scheme: dark; }
     .poll-frame iframe { display: block; width: 100%; border: 0; }
+    .poll-close { position: absolute; top: 14px; right: 14px; width: 36px; height: 36px; border-radius: 50%;
+                  border: 2px solid var(--rule); background: #fff; font: inherit; font-size: 18px; cursor: pointer; }
 
-    /* ═══ FOOTER ═══ */
-    .footer-in {
-      border-top: 1px solid var(--line);
-      padding-block: 40px 52px;
-      margin-top: clamp(30px, 6vw, 70px);
+    @media (max-width: 820px) {
+      .intro, .board, .facts { grid-template-columns: 1fr; gap: 32px; }
+      .intro { padding-top: 36px; }
     }
-    .footer-grid {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 18px 40px;
-      justify-content: space-between;
-      align-items: center;
+    @media (max-width: 440px) {
+      .pill .long { display: none; }
+      .flav { columns: 1; }
     }
-    .footer-links { display: flex; gap: 24px; flex-wrap: wrap; }
-    .footer-links a {
-      font-family: var(--mono);
-      font-size: 10.5px;
-      letter-spacing: .13em;
-      text-transform: uppercase;
-      color: var(--haze);
-      text-decoration: none;
-      transition: color .2s;
-    }
-    .footer-links a:hover { color: var(--chill); }
-    .colophon {
-      font-family: var(--mono);
-      font-size: 10px;
-      letter-spacing: .1em;
-      text-transform: uppercase;
-      color: var(--haze);
-      opacity: .7;
-    }
-
-    /* ═══ RESPONSIVE ═══ */
-    @media (max-width: 860px) {
-    }
-    @media (max-width: 560px) {
-      body { font-size: 16px; }
-      .devbar a { margin-left: 0; }
-      .bay { --tag-h: 46px; }
-      .bay__count { margin-left: 0; width: 100%; }
-    }
-
-    /* ═══ MOTION ═══ */
-    .js .rise { opacity: 0; transform: translateY(14px); transition: opacity .6s ease, transform .6s cubic-bezier(.2,.7,.3,1); }
-    .js .rise.lit { opacity: 1; transform: none; }
-
-    @media (prefers-reduced-motion: reduce) {
-      html { scroll-behavior: auto; }
-      *, *::before, *::after {
-        animation-duration: .001ms !important;
-        animation-iteration-count: 1 !important;
-        transition-duration: .001ms !important;
-      }
-      .js .rise { opacity: 1; transform: none; }
-      .bay__led { opacity: 1; }
-    }
+    @media (prefers-reduced-motion: reduce) { .btn { transition: none; } }
   </style>
 </head>
 <body>
 
-<div class="interior" aria-hidden="true"></div>
-
 <div class="devbar">
-  <div class="devbar-inner">
-    <p>This site is under development.</p>
+  <div class="wrap">
+    <span>This site is under development.</span>
     <a href="old/index.html">Go to the old site &rarr;</a>
   </div>
 </div>
 
-<header class="fascia">
-  <div class="fascia__inner wrap">
-    <div class="fascia__brand">
-      <img class="fascia__logo"
-           src="brand/cookedcoke-full-logo-1500w.png"
-           srcset="brand/cookedcoke-full-logo-750w.png 750w,
-                   brand/cookedcoke-full-logo-1500w.png 1500w"
-           sizes="(max-width: 700px) 200px, 340px"
-           width="1499" height="384"
-           alt="Cooked Coke Co">
-    </div>
+<div class="wrap">
+  <header class="top">
+    <img class="logo" src="brand/cookedcoke-full-logo-1500w.png"
+         srcset="brand/cookedcoke-full-logo-750w.png 750w, brand/cookedcoke-full-logo-1500w.png 1500w"
+         sizes="230px" width="1499" height="384" alt="Cooked Coke Co">
+    <span class="pill" id="pill" role="status" aria-live="polite"><i></i><span id="pillText">Checking…</span></span>
+  </header>
 
-    <div class="fascia__right">
-      <dl class="readout" data-state="closed" role="status" aria-live="polite">
-        <dt>Status</dt>
-        <dd><i class="dot"></i><span data-status="value">Checking</span></dd>
-        <dt>Next</dt>
-        <dd><span data-status="next-compact">&mdash;</span></dd>
-        <dt>Set point</dt>
-        <dd>4&#8202;&deg;C</dd>
-      </dl>
-      <button id="themeToggle" class="lightswitch" type="button" aria-label="Turn the case light on or off">
-        <img src="light.svg" alt="" class="theme-icon-light">
-        <img src="dark.svg" alt="" class="theme-icon-dark">
-      </button>
-    </div>
-  </div>
-</header>
-
-
-<main id="mainContent">
-  <div id="page-content">
-
-
-    <!-- ═══ THE CASE ═══ -->
-    <section id="catalog" class="wrap">
-      <div class="case">
-
-        <article class="bay" style="--tint: var(--sh-01)">
-          <div class="bay__led" aria-hidden="true"></div>
-          <div class="bay__rail">
-            <span class="bay__no">Shelf 01</span>
-            <h3 class="bay__name">Classics</h3>
-            <span class="bay__count">7 facings</span>
-          </div>
-          <p class="bay__note">Each one with its mini beside it. Solo only comes in the one size.</p>
-          <div class="deck">
-            <div class="facing" data-form="can" style="--tint: var(--br-coke)">
-              <span class="shot"><i data-name="Coke"></i><img src="products/coke.png" alt="" loading="lazy"></span>
-              <span class="tag">Coke</span>
-            </div>
-            <div class="facing" data-form="mini" style="--tint: var(--br-coke)">
-              <span class="shot"><i data-name="Coke Mini"></i><img src="products/coke-mini.png" alt="" loading="lazy"></span>
-              <span class="tag">Coke Mini</span>
-            </div>
-            <div class="facing" data-form="can" style="--tint: var(--br-fanta)">
-              <span class="shot"><i data-name="Fanta"></i><img src="products/fanta.png" alt="" loading="lazy"></span>
-              <span class="tag">Fanta</span>
-            </div>
-            <div class="facing" data-form="mini" style="--tint: var(--br-fanta)">
-              <span class="shot"><i data-name="Fanta Mini"></i><img src="products/fanta-mini.png" alt="" loading="lazy"></span>
-              <span class="tag">Fanta Mini</span>
-            </div>
-            <div class="facing" data-form="can" style="--tint: var(--br-sprite)">
-              <span class="shot"><i data-name="Sprite"></i><img src="products/sprite.png" alt="" loading="lazy"></span>
-              <span class="tag">Sprite</span>
-            </div>
-            <div class="facing" data-form="mini" style="--tint: var(--br-sprite)">
-              <span class="shot"><i data-name="Sprite Mini"></i><img src="products/sprite-mini.png" alt="" loading="lazy"></span>
-              <span class="tag">Sprite Mini</span>
-            </div>
-            <div class="facing" data-form="can" style="--tint: var(--br-solo)">
-              <span class="shot"><i data-name="Solo"></i><img src="products/solo.png" alt="" loading="lazy"></span>
-              <span class="tag">Solo</span>
-            </div>
-            <a class="facing facing--mystery facing--order" data-form="can" href="https://cookedcoke.square.site/s/shop" target="_blank" rel="noopener">
-              <span class="shot"><i></i></span>
-              <span class="tag">Order</span>
-            </a>
-          </div>
-          <div class="bay__plate" aria-hidden="true"></div>
-        </article>
-
-        <article class="bay" style="--tint: var(--sh-02)">
-          <div class="bay__led" aria-hidden="true"></div>
-          <div class="bay__rail">
-            <span class="bay__no">Shelf 02</span>
-            <h3 class="bay__name">Chi Forest</h3>
-            <span class="bay__count">9 facings</span>
-          </div>
-          <p class="bay__note">Zero-sugar sparkling water, and the longest shelf in the case.</p>
-          <div class="deck">
-            <div class="facing" data-form="bottle" style="--fade:0%">
-              <span class="shot"><i data-name="White Peach"></i><img src="products/chi-white-peach.png" alt="" loading="lazy"></span>
-              <span class="tag">White Peach</span>
-            </div>
-            <div class="facing" data-form="bottle" style="--fade:10%">
-              <span class="shot"><i data-name="Lychee Fizzy"></i><img src="products/chi-lychee-fizzy.png" alt="" loading="lazy"></span>
-              <span class="tag">Lychee Fizzy</span>
-            </div>
-            <div class="facing" data-form="bottle" style="--fade:20%">
-              <span class="shot"><i data-name="Grape Delight"></i><img src="products/chi-grape-delight.png" alt="" loading="lazy"></span>
-              <span class="tag">Grape Delight</span>
-            </div>
-            <button class="facing facing--mystery" id="voteBtn" data-form="bottle" data-mystery="vote" type="button" aria-haspopup="dialog">
-              <span class="shot"><i></i></span>
-              <span class="tag">Vote</span>
-            </button>
-            <div class="facing" data-form="bottle" style="--fade:30%">
-              <span class="shot"><i data-name="Green Apple"></i><img src="products/chi-green-apple.png" alt="" loading="lazy"></span>
-              <span class="tag">Green Apple</span>
-            </div>
-            <div class="facing" data-form="bottle" style="--fade:40%">
-              <span class="shot"><i data-name="Watermelon"></i><img src="products/chi-watermelon.png" alt="" loading="lazy"></span>
-              <span class="tag">Watermelon</span>
-            </div>
-            <div class="facing" data-form="bottle" style="--fade:50%">
-              <span class="shot"><i data-name="Guava"></i><img src="products/chi-guava.png" alt="" loading="lazy"></span>
-              <span class="tag">Guava</span>
-            </div>
-            <div class="facing" data-form="bottle" style="--fade:60%">
-              <span class="shot"><i data-name="Orange"></i><img src="products/chi-orange.png" alt="" loading="lazy"></span>
-              <span class="tag">Orange</span>
-            </div>
-            <div class="facing" data-form="bottle" style="--fade:70%">
-              <span class="shot"><i data-name="Bamboo Grapefruit"></i><img src="products/chi-bamboo-grapefruit.png" alt="" loading="lazy"></span>
-              <span class="tag">Bamboo Grapefruit</span>
-            </div>
-            <div class="facing" data-form="bottle" style="--fade:80%">
-              <span class="shot"><i data-name="Pomelo Zest"></i><img src="products/chi-pomelo-zest.png" alt="" loading="lazy"></span>
-              <span class="tag">Pomelo Zest</span>
-            </div>
-          </div>
-          <div class="bay__plate" aria-hidden="true"></div>
-        </article>
-
-        <article class="bay" style="--tint: var(--sh-03)">
-          <div class="bay__led" aria-hidden="true"></div>
-          <div class="bay__rail">
-            <span class="bay__no">Shelf 03</span>
-            <h3 class="bay__name">Tea &amp; Yoosh</h3>
-            <span class="bay__count">3 facings</span>
-          </div>
-          <p class="bay__note">Unsweetened tea, and Yoosh in two flavours.</p>
-          <div class="deck">
-            <div class="facing" data-form="bottle" style="--fade:0%">
-              <span class="shot"><i data-name="Iced Black Tea"></i><img src="products/iced-black-tea.png" alt="" loading="lazy"></span>
-              <span class="tag">Iced Black Tea</span>
-            </div>
-            <div class="facing" data-form="bottle" style="--fade:28%">
-              <span class="shot"><i data-name="Yoosh"></i><img src="products/yoosh.png" alt="" loading="lazy"></span>
-              <span class="tag">Yoosh</span>
-            </div>
-            <div class="facing" data-form="bottle" style="--fade:52%">
-              <span class="shot"><i data-name="Yoosh Lychee"></i><img src="products/yoosh-lychee.png" alt="" loading="lazy"></span>
-              <span class="tag">Yoosh Lychee</span>
-            </div>
-            <button class="facing facing--mystery" data-form="bottle" data-mystery="hours" type="button" aria-haspopup="dialog">
-              <span class="shot"><i></i></span>
-              <span class="tag">Hours</span>
-            </button>
-          </div>
-          <div class="bay__plate" aria-hidden="true"></div>
-        </article>
-
-        <article class="bay" style="--tint: var(--sh-04)">
-          <div class="bay__led" aria-hidden="true"></div>
-          <div class="bay__rail">
-            <span class="bay__no">Shelf 04</span>
-            <h3 class="bay__name">Noodles &amp; snacks</h3>
-            <span class="bay__count">7 facings</span>
-          </div>
-          <p class="bay__note">The whole Chef Kang range, plus Mamee and chips — kept cold with everything else.</p>
-          <div class="deck">
-            <div class="facing" data-form="bowl" style="--fade:0%">
-              <span class="shot"><i data-name="Regular"></i><img src="products/chef-kang-regular.png" alt="" loading="lazy"></span>
-              <span class="tag">Regular</span>
-            </div>
-            <div class="facing" data-form="bowl" style="--fade:14%">
-              <span class="shot"><i data-name="Hot &amp; Spicy Beef"></i><img src="products/chef-kang-hot-spicy-beef.png" alt="" loading="lazy"></span>
-              <span class="tag">Hot &amp; Spicy Beef</span>
-            </div>
-            <div class="facing" data-form="bowl" style="--fade:28%">
-              <span class="shot"><i data-name="Seafood"></i><img src="products/chef-kang-seafood.png" alt="" loading="lazy"></span>
-              <span class="tag">Seafood</span>
-            </div>
-            <div class="facing" data-form="bowl" style="--fade:42%">
-              <span class="shot"><i data-name="Pickled Veg Beef"></i><img src="products/chef-kang-pickled-veg-beef.png" alt="" loading="lazy"></span>
-              <span class="tag">Pickled Veg Beef</span>
-            </div>
-            <div class="facing" data-form="bowl" style="--fade:56%">
-              <span class="shot"><i data-name="Pork &amp; Fried Shallots"></i><img src="products/chef-kang-pork-shallots.png" alt="" loading="lazy"></span>
-              <span class="tag">Pork &amp; Fried Shallots</span>
-            </div>
-            <button class="facing facing--mystery" data-form="bowl" data-mystery="token" type="button" aria-haspopup="dialog">
-              <span class="shot"><i></i></span>
-              <span class="tag">Tokens</span>
-            </button>
-            <div class="facing" data-form="pack" style="--fade:34%">
-              <span class="shot"><i data-name="Mamee BBQ"></i><img src="products/mamee-bbq.png" alt="" loading="lazy"></span>
-              <span class="tag">Mamee BBQ</span>
-            </div>
-            <div class="facing" data-form="pack" style="--fade:62%">
-              <span class="shot"><i data-name="Red Rock Deli"></i><img src="products/red-rock-deli.png" alt="" loading="lazy"></span>
-              <span class="tag">Red Rock Deli</span>
-            </div>
-          </div>
-          <div class="bay__plate" aria-hidden="true"></div>
-        </article>
-
+  <main>
+    <section class="intro">
+      <div>
+        <h1>Cold drinks &amp; noodles on <em>Level&nbsp;7.</em></h1>
+        <p>A student-run tuck shop at Reddam House. Open every recess, and at lunch every day except Tuesday.</p>
+      </div>
+      <div class="ctas">
+        <a class="btn btn--red" href="https://cookedcoke.square.site/s/shop" target="_blank" rel="noopener">Order for pickup <small>Square &rarr;</small></a>
+        <button class="btn" id="voteBtn" type="button">Vote on what's next <small>Get 10% off</small></button>
       </div>
     </section>
 
-  </div>
-
-  <!-- ═══ VOTE ═══ -->
-  <div id="vote-view" class="wrap">
-    <div class="poll-shell">
-      <span class="eyebrow">Have a say</span>
-      <h2>What goes on the shelf next?</h2>
-      <p>One vote each. Answer it and we'll hand you a 10% code on the way out.</p>
-      <div class="poll-frame">
-        <iframe data-tally-src="https://tally.so/embed/D4Dq6X?alignLeft=1&amp;transparentBackground=1&amp;dynamicHeight=1" loading="lazy" width="100%" height="225" frameborder="0" marginheight="0" marginwidth="0" title="Cooked Coke community poll"></iframe>
+    <section class="board" aria-label="Menu">
+      <div>
+        <div class="group">
+          <h2>Soft drinks</h2>
+          <ul class="items">
+            <li><b><i style="background:#e4002b"></i>Coke</b><span class="lead"></span><em>Can · Mini</em></li>
+            <li><b><i style="background:#ff7a00"></i>Fanta</b><span class="lead"></span><em>Can · Mini</em></li>
+            <li><b><i style="background:#00a94f"></i>Sprite</b><span class="lead"></span><em>Can · Mini</em></li>
+            <li><b><i style="background:#ffc300"></i>Solo</b><span class="lead"></span><em>Can</em></li>
+          </ul>
+        </div>
+        <div class="group">
+          <h2>Chi Forest <small>$4 each</small></h2>
+          <p class="note">Zero-sugar sparkling water.</p>
+          <ul class="flav">
+            <li>White Peach</li><li>Lychee Fizzy</li><li>Grape Delight</li>
+            <li>Green Apple</li><li>Watermelon</li><li>Guava</li>
+            <li>Orange</li><li>Bamboo Grapefruit</li><li>Pomelo Zest</li>
+          </ul>
+        </div>
       </div>
-      <button onclick="hideVote()" class="btn btn-secondary" style="margin-top: 24px;">Back to the case</button>
+      <div>
+        <div class="group">
+          <h2>Tea &amp; Yoosh</h2>
+          <ul class="items">
+            <li><b>Iced Black Tea</b><span class="lead"></span><em>Unsweetened</em></li>
+            <li><b>Yoosh</b><span class="lead"></span><em>Original · Lychee</em></li>
+          </ul>
+        </div>
+        <div class="group">
+          <h2>Chef Kang noodles <small>$3 each</small></h2>
+          <ul class="items">
+            <li><b>Regular</b><span class="lead"></span></li>
+            <li><b>Hot &amp; Spicy Beef</b><span class="lead"></span></li>
+            <li><b>Seafood</b><span class="lead"></span></li>
+            <li><b>Pickled Vegetables Beef</b><span class="lead"></span></li>
+            <li><b>Pork &amp; Fried Shallots</b><span class="lead"></span></li>
+          </ul>
+        </div>
+        <div class="group">
+          <h2>Snacks</h2>
+          <ul class="items">
+            <li><b>Mamee</b><span class="lead"></span><em>BBQ</em></li>
+            <li><b>Red Rock Deli</b><span class="lead"></span><em>Chips</em></li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <section class="facts">
+      <div class="card">
+        <h3>When we're open</h3>
+        <table class="hours">
+          <caption>We close on the bell.</caption>
+          <thead><tr><th><span class="sr">Day</span></th><th>Recess<small>11:00–11:15</small></th><th>Lunch<small>13:10–13:45</small></th></tr></thead>
+          <tbody>
+            <tr data-day="1"><th>Monday</th><td class="y">Open</td><td class="y">Open</td></tr>
+            <tr data-day="2"><th>Tuesday</th><td class="y">Open</td><td class="n">Closed</td></tr>
+            <tr data-day="3"><th>Wednesday</th><td class="y">Open</td><td class="y">Open</td></tr>
+            <tr data-day="4"><th>Thursday</th><td class="y">Open</td><td class="y">Open</td></tr>
+            <tr data-day="5"><th>Friday</th><td class="y">Open</td><td class="y">Open</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="card">
+        <h3>Tokens</h3>
+        <div class="token">
+          <div class="coin" aria-hidden="true">50¢</div>
+          <p><strong>Buy anything over $2, get a token.</strong>3D-printed on Level 7. Hand one back and it takes 50¢ off.</p>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <span>© 2026 Cooked Coke Social Enterprise · Reddam House</span>
+    <nav>
+      <a href="https://cookedcoke.org">About us</a>
+      <a href="mailto:contact@cookedcoke.xyz">Contact</a>
+    </nav>
+  </footer>
+</div>
+
+<dialog class="poll" id="poll" aria-labelledby="pollTitle">
+  <button class="poll-close" type="button" aria-label="Close" data-close>&times;</button>
+  <div class="poll-in">
+    <h2 id="pollTitle">What should we stock next?</h2>
+    <p>One vote each. Answer it and you'll get a 10% code on the next page.</p>
+    <div class="poll-frame">
+      <iframe data-tally-src="https://tally.so/embed/D4Dq6X?alignLeft=1&amp;transparentBackground=1&amp;dynamicHeight=1" loading="lazy" width="100%" height="260" frameborder="0" title="Cooked Coke community poll"></iframe>
     </div>
   </div>
-</main>
-
-<footer>
-  <div class="footer-in wrap">
-    <div class="footer-grid">
-      <p class="colophon">&copy; 2026 Cooked Coke Social Enterprise &nbsp;·&nbsp; Level 7 Refreshment Hub</p>
-      <div class="footer-links">
-        <a href="https://cookedcoke.org">Governance</a>
-        <a href="https://cookedcoke.square.site/s/shop" target="_blank" rel="noopener">Shop</a>
-        <a href="mailto:contact@cookedcoke.xyz">Contact</a>
-      </div>
-    </div>
-  </div>
-</footer>
-
-<div class="glass" aria-hidden="true"></div>
-<div class="frame" aria-hidden="true"></div>
-
-<!-- ═══ WHAT THE UNMARKED CANS SAY ═══ -->
-<dialog class="reveal" id="reveal" aria-labelledby="revealTitle">
-  <button class="reveal__close" type="button" data-close aria-label="Close">&times;</button>
-  <div class="reveal__inner" id="revealBody"></div>
 </dialog>
 
-<template id="tpl-hours">
-  <span class="eyebrow">Opening hours</span>
-  <h2 id="revealTitle">When we're open</h2>
-  <p data-status="note">Reading today's timetable.</p>
-  <table class="timetable">
-    <thead>
-      <tr>
-        <th scope="col">Day</th>
-        <th scope="col">Recess</th>
-        <th scope="col">Lunch</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr data-day="1"><td>Monday<span class="today-flag">Today</span></td><td class="yes">Open</td><td class="yes">Open</td></tr>
-      <tr data-day="2"><td>Tuesday<span class="today-flag">Today</span></td><td class="yes">Open</td><td class="no">Closed</td></tr>
-      <tr data-day="3"><td>Wednesday<span class="today-flag">Today</span></td><td class="yes">Open</td><td class="yes">Open</td></tr>
-      <tr data-day="4"><td>Thursday<span class="today-flag">Today</span></td><td class="yes">Open</td><td class="yes">Open</td></tr>
-      <tr data-day="5"><td>Friday<span class="today-flag">Today</span></td><td class="yes">Open</td><td class="yes">Open</td></tr>
-    </tbody>
-  </table>
-  <p class="fineprint">Recess runs 11:00&ndash;11:15. Lunch runs 13:10&ndash;13:45. We close on the bell.</p>
-</template>
-
-<template id="tpl-vote">
-  <span class="eyebrow">Have a say</span>
-  <h2 id="revealTitle">You pick the next one</h2>
-  <p>This slot is empty on purpose. Tell us what belongs in it and we'll take 10% off your next order.</p>
-  <button class="btn btn-primary" type="button" data-action="vote">Vote, save 10%</button>
-</template>
-
-<template id="tpl-token">
-  <span class="eyebrow">Loyalty</span>
-  <h2 id="revealTitle">Tokens</h2>
-  <div class="coin" aria-hidden="true">
-    <span>50&cent;</span>
-    <small>Level 7</small>
-  </div>
-  <p>
-    Spend more than $2 and you get a token, printed on the Level 7 3D printer.
-    Bring them back and they come off your total.
-  </p>
-  <p class="token-rate">1 token <em>=</em> 50&cent; credit</p>
-</template>
-
 <script>
-  const htmlElement = document.documentElement;
-
-  /* ─── theme ─── */
-  document.getElementById('themeToggle').addEventListener('click', () => {
-    const next = htmlElement.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
-    htmlElement.setAttribute('data-theme', next);
-    localStorage.setItem('theme_xyz', next);
-  });
-
-  /* ─── service timetable ───
-     Recess every weekday. Lunch every weekday except Tuesday. */
-  const RECESS = ['Recess', 11 * 60, 11 * 60 + 15];
-  const LUNCH  = ['Lunch',  13 * 60 + 10, 13 * 60 + 45];
+  /* Opening status. Recess every weekday; lunch every weekday but Tuesday. */
+  const RECESS = ['Recess', 660, 675], LUNCH = ['Lunch', 790, 825];
   const SCHEDULE = { 1: [RECESS, LUNCH], 2: [RECESS], 3: [RECESS, LUNCH], 4: [RECESS, LUNCH], 5: [RECESS, LUNCH] };
-  const DAY_NAMES = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+  const DAY = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+  const hm = m => String(Math.floor(m / 60)).padStart(2, '0') + ':' + String(m % 60).padStart(2, '0');
 
-  const clock = m => String(Math.floor(m / 60)).padStart(2, '0') + ':' + String(m % 60).padStart(2, '0');
-  const setAll = (key, text) => document.querySelectorAll('[data-status="' + key + '"]')
-    .forEach(el => { el.textContent = text; });
-
-  function findNext(day, minutes) {
-    for (let step = 0; step < 8; step++) {
-      const d = (day + step) % 7;
-      for (const [name, start, end] of (SCHEDULE[d] || [])) {
-        if (step > 0 || start > minutes) {
-          return { name, start, end, day: d, today: step === 0, tomorrow: step === 1 };
-        }
-      }
+  function caseStatus(now = new Date()) {
+    const d = now.getDay(), m = now.getHours() * 60 + now.getMinutes();
+    const on = (SCHEDULE[d] || []).find(([, a, b]) => m >= a && m < b);
+    if (on) return { open: true, service: on[0], until: hm(on[2]), today: d };
+    for (let k = 0; k < 8; k++) {
+      const dd = (d + k) % 7;
+      for (const [n, a] of (SCHEDULE[dd] || []))
+        if (k > 0 || a > m)
+          return { open: false, soon: k === 0 && a - m <= 30, next: n, at: hm(a), today: d,
+                   when: k === 0 ? 'today' : k === 1 ? 'tomorrow' : DAY[dd] };
     }
-    return null;
+    return { open: false, today: d };
   }
 
   function renderStatus() {
-    const now = new Date();
-    const day = now.getDay();
-    const mins = now.getHours() * 60 + now.getMinutes();
-
-    const open = (SCHEDULE[day] || []).find(([, s, e]) => mins >= s && mins < e);
-    const next = findNext(day, mins);
-
-    let state;
-    if (open) {
-      state = 'open';
-      setAll('value', 'Open now');
-      setAll('note', open[0] + ' service, closing at ' + clock(open[2]) + '.');
-    } else if (next && next.today && next.start - mins <= 45) {
-      state = 'soon';
-      setAll('value', 'Opening soon');
-      setAll('note', next.name + ' starts in ' + (next.start - mins) + ' min.');
-    } else {
-      state = 'closed';
-      setAll('value', 'Closed');
-      setAll('note', 'The case is shut and the lights are off.');
-    }
-    document.querySelectorAll('.readout').forEach(p => { p.dataset.state = state; });
-
-    if (next) {
-      setAll('next', next.name);
-      const when = next.today ? 'Today' : next.tomorrow ? 'Tomorrow' : DAY_NAMES[next.day];
-      setAll('next-note', when + ', ' + clock(next.start) + '–' + clock(next.end) + '.');
-      setAll('next-compact', next.name + ' · ' + when + ' ' + clock(next.start));
-    } else {
-      setAll('next', 'None');
-      setAll('next-note', 'Back next term.');
-      setAll('next-compact', 'None scheduled');
-    }
-
-    document.querySelectorAll('tr[data-day="' + day + '"]').forEach(tr => tr.setAttribute('data-today', ''));
+    const s = caseStatus(), pill = document.getElementById('pill'), t = document.getElementById('pillText');
+    pill.classList.toggle('is-open', s.open);
+    pill.classList.toggle('is-soon', !!s.soon);
+    if (s.open) t.innerHTML = 'Open now <span class="long">· ' + s.service + ' until ' + s.until + '</span>';
+    else if (s.next) t.innerHTML = (s.soon ? 'Opening soon' : 'Closed') + ' <span class="long">· ' + s.next + ' ' + s.when + ' ' + s.at + '</span>';
+    else t.textContent = 'Closed';
+    document.querySelectorAll('.hours tr').forEach(r => r.classList.toggle('today', r.dataset.day == s.today));
   }
-
   renderStatus();
   setInterval(renderStatus, 30000);
 
-  /* ─── the strip lights come up as each shelf comes into view ─── */
-  const bays = document.querySelectorAll('.bay');
-  if ('IntersectionObserver' in window) {
-    const io = new IntersectionObserver((entries) => {
-      entries.forEach(entry => {
-        if (entry.isIntersecting) {
-          entry.target.classList.add('lit');
-          io.unobserve(entry.target);
-        }
-      });
-    }, { rootMargin: '0px 0px -10% 0px', threshold: .08 });
-    bays.forEach(b => io.observe(b));
-  } else {
-    bays.forEach(b => b.classList.add('lit'));
+  /* Vote. Voting leads to success.html, which sets has_voted_xyz. */
+  const poll = document.getElementById('poll'), voteBtn = document.getElementById('voteBtn');
+  if (localStorage.getItem('has_voted_xyz') === 'true') {
+    voteBtn.disabled = true;
+    voteBtn.innerHTML = 'Voted — thanks <small>Code saved</small>';
   }
-
-  /* ─── the unmarked cans ─── */
-  const reveal = document.getElementById('reveal');
-  const revealBody = document.getElementById('revealBody');
-
-  document.querySelectorAll('[data-mystery]').forEach(btn => {
-    btn.addEventListener('click', () => {
-      const tpl = document.getElementById('tpl-' + btn.dataset.mystery);
-      if (!tpl) return;
-      revealBody.replaceChildren(tpl.content.cloneNode(true));
-      renderStatus();
-      if (typeof reveal.showModal === 'function') reveal.showModal();
-      else reveal.setAttribute('open', '');
-    });
-  });
-
-  reveal.addEventListener('click', (e) => {
-    const hit = e.target.closest('[data-close], [data-action="vote"]');
-    if (hit) {
-      reveal.close();
-      if (hit.dataset.action === 'vote') showVote();
-      return;
-    }
-    // clicking the backdrop closes it
-    if (e.target === reveal) reveal.close();
-  });
-
-  /* ─── vote ─── */
-  function showVote() {
-    document.getElementById('page-content').style.display = 'none';
-    document.getElementById('vote-view').style.display = 'block';
-    window.scrollTo(0, 0);
+  voteBtn.addEventListener('click', () => {
     if (window.Tally) Tally.loadEmbeds();
-  }
-
-  function hideVote() {
-    document.getElementById('page-content').style.display = 'block';
-    document.getElementById('vote-view').style.display = 'none';
-  }
-
-  window.addEventListener('DOMContentLoaded', () => {
-    setTimeout(() => htmlElement.classList.remove('no-transition'), 60);
-
-    // a product photo that actually loads replaces its drawn stand-in
-    document.querySelectorAll('.shot img').forEach(img => {
-      const mark = () => img.closest('.shot').classList.add('has-photo');
-      if (img.complete && img.naturalWidth > 0) mark();
-      else img.addEventListener('load', mark);
-    });
-
-    // once voted, the vote can stays on the shelf but stops asking
-    if (localStorage.getItem('has_voted_xyz') === 'true') {
-      const voteBtn = document.getElementById('voteBtn');
-      if (voteBtn) {
-        voteBtn.classList.add('is-done');
-        voteBtn.disabled = true;
-        voteBtn.querySelector('.tag').textContent = 'Voted';
-      }
-    }
+    poll.showModal();
+  });
+  poll.addEventListener('click', e => {
+    if (e.target === poll || e.target.closest('[data-close]')) poll.close();
   });
 
-  // Tally embed
+  // Tally embed loader
   var d=document,w="https://tally.so/widgets/embed.js",v=function(){"undefined"!=typeof Tally?Tally.loadEmbeds():d.querySelectorAll("iframe[data-tally-src]:not([src])").forEach((function(e){e.src=e.dataset.tallySrc}))};if("undefined"!=typeof Tally)v();else if(d.querySelector('script[src="'+w+'"]')==null){var s=d.createElement("script");s.src=w,s.onload=v,s.onerror=v,d.body.appendChild(s);}
 </script>
-
 </body>
 </html>
