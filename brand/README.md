@@ -10,7 +10,7 @@ asset host and copy it down here.
 |---|---|
 | `cookedcoke-full-logo-750w.png` | Full lockup (mark + wordmark). Page header on the menu and the vote reward page. |
 | `cookedcoke-full-logo-1500w.png` | Same, for 2× displays. |
-| `cookedcoke-full-logo-white-1500w.png` | White lockup, for dark backgrounds. Currently unused. |
+| `cookedcoke-full-logo-white-1500w.png` | White lockup. Swapped in for the header when the visitor's device is in dark mode. |
 | `cookedcoke-small-logo-400.png` | Mark only. Currently unused on this site; cookedcoke.org uses it. |
 
 ## Rules these follow
@@ -25,8 +25,10 @@ From the brand sheet at `branding-assets/cookedcoke-brand-final/README.md`:
 - **Colours:** `#FE0001` primary, `#B30000` for small text (7.2:1), `#141414`
   wordmark ink. In the stylesheets these are `--red`, `--red-ink` and `--ink`.
 
-The mark is coloured, so it needs no light/dark variant. Don't reintroduce a
-theme swap for it.
+Both sites follow the device's light/dark setting. The mark is red either way,
+but the wordmark is #141414 and disappears on a dark page, so the header uses a
+`<picture>` with a `prefers-color-scheme: dark` source pointing at the white
+lockup. Keep the two in step if either is re-exported.
 
 ## Credit
 

@@ -5,8 +5,10 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
   <meta name="description" content="Your 10% discount code for voting. Show it at the counter on Level 7." />
   <meta name="robots" content="noindex" />
-  <meta name="theme-color" content="#ffffff" />
-  <title>Your code · Cooked Coke Co</title>
+  <meta name="theme-color" content="#ffffff" media="(prefers-color-scheme: light)" />
+  <meta name="theme-color" content="#141414" media="(prefers-color-scheme: dark)" />
+  <meta name="color-scheme" content="light dark" />
+  <title>Your 10% code. Cooked Coke Co</title>
   <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
   <link rel="icon" type="image/png" sizes="32x32" href="favicon-32x32.png">
   <link rel="icon" type="image/png" sizes="16x16" href="favicon-16x16.png">
@@ -14,80 +16,95 @@
   <link rel="manifest" href="site.webmanifest">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400..900&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400..800&display=swap" rel="stylesheet">
   <style>
-    /* The vote reward, in the same menu-board voice as the shop page. */
-    :root { --ink: #141414; --paper: #fff; --muted: #636363; --rule: #e5e5e5; --soft: #f3f3f3;
-            --red: #fe0001; --red-ink: #b30000; --good: #0a9d55; }
+    /* The vote reward, in the menu board's voice. */
+    :root { --paper: #ffffff; --ink: #141414; --muted: #5f5f5f; --rule: #e6e6e6; --wash: #f4f4f4;
+            --red: #fe0001; --red-ink: #b30000; --red-wash: #fff0f0; --good: #0a8f4d; }
+    @media (prefers-color-scheme: dark) {
+      :root { --paper: #141414; --ink: #f5f5f5; --muted: #a9a9a9; --rule: #2b2b2b; --wash: #1d1d1d;
+              --red: #ff2b2b; --red-ink: #ff6b6b; --red-wash: #2a1414; --good: #3fd18a; }
+    }
     * { box-sizing: border-box; margin: 0; padding: 0; }
-    body { font-family: Montserrat, system-ui, sans-serif; color: var(--ink); background: var(--paper);
-           -webkit-font-smoothing: antialiased; font-variant-numeric: tabular-nums; min-height: 100vh;
-           display: flex; flex-direction: column; }
+    body { font-family: Montserrat, system-ui, sans-serif; color: var(--ink); background: var(--paper); font-size: 1.0625rem;
+           line-height: 1.55; -webkit-font-smoothing: antialiased; font-variant-numeric: tabular-nums; min-height: 100vh; display: flex; flex-direction: column; }
     a { color: inherit; }
-    :focus-visible { outline: 3px solid var(--red); outline-offset: 3px; border-radius: 4px; }
+    :focus-visible { outline: 3px solid var(--red); outline-offset: 3px; border-radius: 6px; }
     .wrap { width: 100%; max-width: 1120px; margin: 0 auto; padding: 0 24px; }
 
-    header.top { display: flex; align-items: center; justify-content: space-between; gap: 16px;
-                 padding: 22px 0; border-bottom: 3px solid var(--ink); }
-    .logo { width: clamp(180px, 20vw, 230px); height: auto; display: block; }
-    header.top a.back { font-weight: 700; font-size: 14px; text-decoration: none; }
-    @media (max-width: 480px) { header.top a.back .long { display: none; } }
-    header.top a.back:hover { text-decoration: underline; text-underline-offset: 3px; }
+    header.top { display: flex; align-items: center; justify-content: space-between; gap: 16px; padding: 22px 0; border-bottom: 3px solid var(--ink); }
+    .logo img { width: clamp(180px, 20vw, 230px); height: auto; display: block; }
+    header.top a.back { font-weight: 700; font-size: .9375rem; text-decoration: none; }
+    header.top a.back:hover { text-decoration: underline; text-underline-offset: 4px; }
 
     main { flex: 1; display: grid; place-items: center; padding: 56px 0; }
-    .ticket { width: 100%; max-width: 520px; border: 2px solid var(--ink); border-radius: 14px; padding: 32px; }
-    .kicker { font-size: 13px; font-weight: 800; text-transform: uppercase; letter-spacing: .14em; color: var(--red-ink); }
-    h1 { font-size: clamp(2rem, 6vw, 2.8rem); font-weight: 800; letter-spacing: -.03em; line-height: 1.02; margin: 10px 0 12px; }
-    .lede { color: var(--muted); font-size: 17px; }
+    .ticket { width: 100%; max-width: 520px; border: 2px solid var(--ink); border-radius: 18px; padding: clamp(24px, 5vw, 36px); }
+    h1 { font-size: clamp(2rem, 6vw, 2.75rem); font-weight: 800; letter-spacing: -.035em; line-height: 1.02; }
+    .lede { color: var(--muted); font-size: 1.0625rem; margin-top: 10px; }
 
-    .code { margin: 26px 0 8px; display: flex; border: 2px solid var(--ink); border-radius: 10px; overflow: hidden; }
-    .code span { flex: 1; padding: 18px 20px; font-size: clamp(28px, 8vw, 38px); font-weight: 900; letter-spacing: .14em; }
-    .code button { border: 0; border-left: 2px solid var(--ink); background: var(--soft); padding: 0 22px; cursor: pointer;
-                   font: inherit; font-weight: 800; font-size: 14px; }
+    .code { margin: 26px 0 8px; display: flex; border: 2px solid var(--ink); border-radius: 12px; overflow: hidden; }
+    .code span { flex: 1; padding: 16px 20px; font-size: clamp(30px, 9vw, 42px); font-weight: 800; letter-spacing: .12em; color: var(--red); }
+    .code button { border: 0; border-left: 2px solid var(--ink); background: var(--wash); color: var(--ink); padding: 0 22px; cursor: pointer;
+                   font: inherit; font-weight: 700; font-size: .9375rem; transition: background-color .15s; }
+    .code button:hover { background: var(--rule); }
     .code button.copied { background: var(--good); color: #fff; }
-    .hint { font-size: 13px; color: var(--muted); }
+    .hint { font-size: .8125rem; color: var(--muted); }
 
-    .btn { display: flex; justify-content: space-between; align-items: center; margin-top: 24px; padding: 18px 22px;
-           border-radius: 8px; background: var(--red); color: #fff; font-weight: 700; font-size: 17px; text-decoration: none; }
-    .btn small { font-weight: 500; font-size: 13px; opacity: .85; }
-    .fine { margin-top: 18px; padding-top: 16px; border-top: 1px solid var(--rule); font-size: 13px; color: var(--muted); }
+    .btn { display: inline-flex; margin-top: 24px; padding: 16px 22px; border-radius: 10px; background: var(--red); color: #fff; font-weight: 700;
+           text-decoration: none; box-shadow: 0 10px 22px -12px var(--red); transition: transform .15s; }
+    .btn:hover { transform: translateY(-2px); }
+    .fine { margin-top: 20px; padding-top: 16px; border-top: 1px solid var(--rule); font-size: .8125rem; color: var(--muted); }
 
-    footer { border-top: 3px solid var(--ink); padding: 22px 0 40px; display: flex; justify-content: space-between;
-             flex-wrap: wrap; gap: 12px; font-size: 14px; color: var(--muted); }
-    footer nav { display: flex; gap: 20px; }
+    footer { border-top: 3px solid var(--ink); padding: 22px 0 40px; display: flex; justify-content: space-between; flex-wrap: wrap; gap: 12px;
+             font-size: .9375rem; color: var(--muted); }
+    footer nav { display: flex; gap: 22px; }
+    footer a { text-underline-offset: 3px; }
+
+    /* fizz, as on the menu: here it celebrates the code you just earned */
+    #fizz { position: fixed; inset: 0; pointer-events: none; z-index: 40; overflow: hidden; }
+    .bub { position: absolute; border-radius: 50%; translate: -50% -50%; opacity: 0;
+           background: radial-gradient(circle at 32% 30%, rgba(255,255,255,.8) 0 16%, transparent 18%), var(--red);
+           animation: bub var(--dur) cubic-bezier(.25,.6,.35,1) var(--delay) forwards; }
+    @keyframes bub { 0% { opacity: 0; transform: translate(0,0) scale(.3); } 18% { opacity: .95; } 100% { opacity: 0; transform: translate(var(--sway), var(--rise)) scale(1); } }
+
+    @media (max-width: 480px) { header.top a.back .long { display: none; } }
+    @media (prefers-reduced-motion: reduce) { *, *::before, *::after { animation: none !important; transition: none !important; } }
   </style>
 </head>
 <body>
 <div class="wrap">
   <header class="top">
-    <a href="/"><img class="logo" src="brand/cookedcoke-full-logo-750w.png" width="747" height="192" alt="Cooked Coke Co — back to the menu"></a>
-    <a class="back" href="/">&larr; <span class="long">Back to the </span>menu</a>
+    <a class="logo" href="/">
+      <picture>
+        <source media="(prefers-color-scheme: dark)" srcset="brand/cookedcoke-full-logo-white-1500w.png">
+        <img src="brand/cookedcoke-full-logo-750w.png" width="747" height="192" alt="Cooked Coke Co, back to the menu">
+      </picture>
+    </a>
+    <a class="back" href="/">Back to <span class="long">the </span>menu</a>
   </header>
 </div>
 
 <main class="wrap">
   <div class="ticket">
-    <p class="kicker">Thanks for voting</p>
-    <h1>Here's your 10% off.</h1>
-    <p class="lede">Show it at the counter on Level 7 and it comes off your next buy.</p>
-
-    <div class="code">
+    <h1>Thanks for voting. Here's 10% off.</h1>
+    <p class="lede">Show this code at the counter on Level 7 and it comes off your next buy.</p>
+    <div class="code" id="codeBox">
       <span id="code">······</span>
       <button id="copyBtn" type="button">Copy</button>
     </div>
-    <p class="hint" id="codeNote">One code per person. It's saved on this device.</p>
-
-    <a class="btn" href="/">See what's on the menu <small>&rarr;</small></a>
-    <p class="fine">Level 7 · Reddam House · Recess and lunch</p>
+    <p class="hint" id="codeNote">One code per person. It stays saved on this device.</p>
+    <a class="btn" href="/">See what's always in</a>
+    <p class="fine">Open every recess, and at lunch every day but Tuesday.</p>
   </div>
 </main>
 
 <div class="wrap">
   <footer>
-    <span>© 2026 Cooked Coke Social Enterprise · Reddam House</span>
+    <span>© 2026 Cooked Coke Social Enterprise, Reddam House</span>
     <nav><a href="https://cookedcoke.org">About us</a><a href="mailto:contact@cookedcoke.co">Contact</a></nav>
   </footer>
 </div>
+<div id="fizz" aria-hidden="true"></div>
 
 <script>
   // RULE: first digit + last digit = 10
@@ -116,9 +133,23 @@
       copyBtn.classList.add('copied');
       setTimeout(() => { copyBtn.textContent = 'Copy'; copyBtn.classList.remove('copied'); }, 2000);
     };
-    const blocked = () => { codeNote.textContent = "Copying is blocked here — write the code down instead."; };
+    const blocked = () => { codeNote.textContent = "Copying is blocked here. Write the code down instead."; };
     if (navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(code).then(done).catch(blocked);
     else blocked();
+  });
+
+  /* the code arrives with a fizz */
+  if (!matchMedia('(prefers-reduced-motion: reduce)').matches) addEventListener('load', () => {
+    const r = document.getElementById('codeBox').getBoundingClientRect(), layer = document.getElementById('fizz');
+    const rand = (a, b) => a + Math.random() * (b - a);
+    for (let i = 0; i < 26; i++) {
+      const b = document.createElement('span'), z = rand(5, 14);
+      b.className = 'bub';
+      b.style.cssText = `left:${r.left + rand(0, r.width)}px;top:${r.top + 6}px;width:${z}px;height:${z}px;` +
+        `--rise:${-rand(80, 220)}px;--sway:${rand(-20, 20)}px;--dur:${rand(700, 1400)}ms;--delay:${rand(0, 450)}ms`;
+      b.addEventListener('animationend', () => b.remove());
+      layer.appendChild(b);
+    }
   });
 </script>
 </body>
