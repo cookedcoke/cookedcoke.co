@@ -473,13 +473,13 @@
   const DEMO = { rewards: [{ name: 'Free Coke', points: 1000 }, { name: '$2 off any drink', points: 500 }],
                  double_points: [{ name: 'Double points Friday', multiplier: 2, start: '2026-10-23', end: '2026-10-23', on_now: true }],
                  student_site: 'https://my.cookedcoke.co/' };
-  const fmtDay = iso => new Date(iso + 'T12:00:00').toLocaleDateString('en-AU', { weekday: 'short', day: 'numeric', month: 'short' });
+  const fmtDay = iso => new Date(iso + 'T12:00:00').toLocaleDateString('en-AU', { weekday: 'short', day: 'numeric', month: 'short' }).replace(',', '');
   function showPromos(p) {
     const items = [];
     for (const e of p.double_points || []) {
       const x = e.multiplier === 2 ? 'Double' : e.multiplier + '×';
       const when = e.on_now ? (e.start === e.end ? 'today' : 'on now, until ' + fmtDay(e.end))
-                            : fmtDay(e.start) + (e.start === e.end ? '' : ' to ' + fmtDay(e.end));
+                            : 'coming ' + fmtDay(e.start) + (e.start === e.end ? '' : ' to ' + fmtDay(e.end));
       items.push({ hot: e.on_now, text: e.name || x + ' points', note: when });
     }
     for (const r of p.rewards || []) items.push({ text: r.name, note: 'for ' + Number(r.points).toLocaleString('en-AU') + ' points' });
