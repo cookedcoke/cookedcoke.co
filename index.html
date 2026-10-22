@@ -74,6 +74,28 @@
     @keyframes pulse { 0% { box-shadow: 0 0 0 0 color-mix(in srgb, var(--open) 45%, transparent); }
                        100% { box-shadow: 0 0 0 9px transparent; } }
 
+    /* what's on: rewards and double points days from Fizzy, the stall's own system.
+       Hidden until there's something to say, so a quiet week looks exactly as before. */
+    .promo { display: flex; flex-wrap: wrap; align-items: center; gap: 10px 22px; margin-top: 18px; padding: 14px 18px;
+             border-radius: 14px; background: var(--red-wash); font-size: var(--t-s); }
+    .promo[hidden] { display: none; }
+    .promo-lead { font-weight: 800; color: var(--red-ink); letter-spacing: -.01em; }
+    .promo ul { list-style: none; display: flex; flex-wrap: wrap; gap: 6px 18px; flex: 1; min-width: 0; }
+    .promo li { display: inline-flex; align-items: center; gap: 8px; font-weight: 600; }
+    .promo li::before { content: ''; width: 8px; height: 8px; border-radius: 50%; background: var(--red); flex: none; }
+    .promo li.hot { color: var(--red-ink); font-weight: 800; }
+    .promo li.hot::before { box-shadow: 0 0 0 0 var(--red); animation: pulse-red 2s infinite; }
+    @keyframes pulse-red { 0% { box-shadow: 0 0 0 0 color-mix(in srgb, var(--red) 45%, transparent); } 100% { box-shadow: 0 0 0 8px transparent; } }
+    .promo li em { font-style: normal; color: var(--muted); font-weight: 600; }
+    .promo a { margin-left: auto; font-weight: 700; color: var(--red-ink); text-underline-offset: 3px; white-space: nowrap; }
+    @media (max-width: 600px) {
+      .promo { flex-direction: column; align-items: flex-start; gap: 8px; }
+      .promo ul { flex-direction: column; width: 100%; }
+      .promo li { display: block; }
+      .promo li::before { display: inline-block; margin-right: 8px; vertical-align: 1px; }
+      .promo a { margin-left: 0; }
+    }
+
     /* hero */
     .hero { display: grid; grid-template-columns: 1fr 1.08fr; gap: clamp(32px, 6vw, 72px); align-items: center;
             padding: clamp(40px, 7vw, 76px) 0; border-bottom: 1px solid var(--rule); }
@@ -250,6 +272,10 @@
     </a>
     <span class="status" id="status" data-state="closed" role="status" aria-live="polite"><i aria-hidden="true"></i><span id="statusText">Checking hours</span></span>
   </header>
+  <aside class="promo" id="promo" aria-label="What's on at the stall" hidden>
+    <span class="promo-lead">What's on</span>
+    <ul id="promoList"></ul>
+  </aside>
 
   <main>
     <section class="hero">
@@ -425,6 +451,51 @@
   if (localStorage.getItem('has_voted_xyz') === 'true') votes.forEach(b => { b.disabled = true; b.innerHTML = 'You’ve voted, thanks'; });
   votes.forEach(b => b.addEventListener('click', () => { if (window.Tally) Tally.loadEmbeds(); poll.showModal(); }));
   poll.addEventListener('click', e => { if (e.target === poll || e.target.closest('[data-close]')) poll.close(); });
+
+  /* What's on. Fizzy (the stall's points system) publishes live rewards and double points days;
+     nothing about any student. If it can't be reached the strip just stays hidden.
+     ?promos=demo previews it with made-up data. */
+  const PROMOS = 'https://my.cookedcoke.co/promos.json';
+  const DEMO = { rewards: [{ name: 'Free Coke', points: 1000 }, { name: '$2 off any drink', points: 500 }],
+                 double_points: [{ name: 'Double points Friday', multiplier: 2, start: '2026-10-23', end: '2026-10-23', on_now: true }],
+                 student_site: 'https://my.cookedcoke.co/' };
+  const fmtDay = iso => new Date(iso + 'T12:00:00').toLocaleDateString('en-AU', { weekday: 'short', day: 'numeric', month: 'short' });
+  function showPromos(p) {
+    const items = [];
+    for (const e of p.double_points || []) {
+      const x = e.multiplier === 2 ? 'Double' : e.multiplier + '×';
+      const when = e.on_now ? (e.start === e.end ? 'today' : 'on now, until ' + fmtDay(e.end))
+                            : fmtDay(e.start) + (e.start === e.end ? '' : ' to ' + fmtDay(e.end));
+      items.push({ hot: e.on_now, text: e.name || x + ' points', note: when });
+    }
+    for (const r of p.rewards || []) items.push({ text: r.name, note: 'for ' + Number(r.points).toLocaleString('en-AU') + ' points' });
+    if (!items.length) return;
+    const list = document.getElementById('promoList');
+    for (const it of items.slice(0, 5)) {
+      const li = document.createElement('li'), em = document.createElement('em');
+      if (it.hot) li.className = 'hot';
+      li.append(it.text + ' ');
+      em.textContent = it.note;
+      li.append(em);
+      list.append(li);
+    }
+    if (p.student_site && /^https:\/\//.test(p.student_site)) {
+      const a = document.createElement('a');
+      a.href = p.student_site; a.textContent = 'Check your points →';
+      document.getElementById('promo').append(a);
+    }
+    const box = document.getElementById('promo');
+    box.hidden = false;
+    if (items.some(i => i.hot)) {
+      const r = box.getBoundingClientRect();
+      fizz(r.left + 24, r.top + r.height / 2, { n: 10, spread: 10, rise: [30, 90], size: [3, 7] });
+    }
+  }
+  if (new URLSearchParams(location.search).get('promos') === 'demo') showPromos(DEMO);
+  else {
+    const ctl = new AbortController(); setTimeout(() => ctl.abort(), 4000);
+    fetch(PROMOS, { signal: ctl.signal, cache: 'no-cache' }).then(r => r.ok ? r.json() : null).then(p => p && showPromos(p)).catch(() => {});
+  }
 
   // Tally embed loader
   var d=document,w="https://tally.so/widgets/embed.js",v=function(){"undefined"!=typeof Tally?Tally.loadEmbeds():d.querySelectorAll("iframe[data-tally-src]:not([src])").forEach((function(e){e.src=e.dataset.tallySrc}))};if("undefined"!=typeof Tally)v();else if(d.querySelector('script[src="'+w+'"]')==null){var s=d.createElement("script");s.src=w,s.onload=v,s.onerror=v,d.body.appendChild(s);}
