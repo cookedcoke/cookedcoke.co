@@ -20,8 +20,10 @@ From the brand sheet at `branding-assets/cookedcoke-brand-final/README.md`:
 - **Full logo minimum width is 180px.** Below that, use the mark alone. The
   page header clamps the logo to exactly 180px at phone widths for this reason.
 - **Clear space** is 0.26× the mark height between mark and wordmark.
-- **Wordmark typeface** is Montserrat Bold (700), SIL Open Font License. The
-  rest of the site is set in Montserrat to match.
+- **Wordmark typeface** is Montserrat Bold (700), SIL Open Font License (it's in
+  the logo artwork). The site itself now matches the student site
+  (my.cookedcoke.co): Bricolage Grotesque for headings, bundled in `/fonts`
+  (SIL OFL), and the system font for body text.
 - **Colours:** `#FE0001` primary, `#B30000` for small text (7.2:1), `#141414`
   wordmark ink. In the stylesheets these are `--red`, `--red-ink` and `--ink`.
 
