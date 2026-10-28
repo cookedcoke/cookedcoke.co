@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en-AU">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
@@ -27,6 +27,8 @@
   <link rel="icon" type="image/png" sizes="16x16" href="favicon-16x16.png">
   <link rel="shortcut icon" href="favicon.ico">
   <link rel="manifest" href="site.webmanifest">
+  <link rel="canonical" href="https://cookedcoke.co/">
+  <link rel="preconnect" href="https://my.cookedcoke.co" crossorigin>
   <link rel="preload" href="fonts/bricolage-latin.woff2" as="font" type="font/woff2" crossorigin>
   <style>
     /* COOKED COKE CO, the menu board - in the same look as the student site (my.cookedcoke.co):
@@ -66,7 +68,8 @@
     h1, h2, h3, .btn, .status b, .promo-lead { font-family: var(--display); }
     a { color: inherit; }
     :focus-visible { outline: 3px solid var(--sun); outline-offset: 3px; border-radius: 6px; }
-    .wrap { max-width: 1120px; margin: 0 auto; padding: 0 24px; }
+    .status .short { display: none; }
+    .wrap { max-width: 1120px; margin: 0 auto; padding: 0 max(24px, env(safe-area-inset-right)) 0 max(24px, env(safe-area-inset-left)); }
     .sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
 
 
@@ -177,7 +180,7 @@
     .how .board { align-items: stretch; }
     .shelf.mine { margin-top: 24px; display: flex; align-items: center; justify-content: space-between; gap: 16px 24px; flex-wrap: wrap; }
     .shelf.mine .btn { margin-top: 0; text-decoration: none; }
-    footer { border-top: 1px dashed var(--rule); margin-top: 12px; padding: 22px 0 44px; display: flex; justify-content: space-between; flex-wrap: wrap;
+    footer { border-top: 1px dashed var(--rule); margin-top: 12px; padding: 22px 0 max(44px, env(safe-area-inset-bottom)); display: flex; justify-content: space-between; flex-wrap: wrap;
              gap: 12px; font-size: var(--t-s); color: var(--muted); }
     footer nav { display: flex; gap: 22px; }
     footer a { text-underline-offset: 3px; }
@@ -246,10 +249,13 @@
     }
     @media (max-width: 480px) {
       .status .long { display: none; }
+      .status .short { display: inline; }
+      .status { padding: 8px 12px 8px 10px; gap: 7px; font-size: .875rem; white-space: nowrap; }
       .group { padding: 18px 16px 10px; }
       .btn { padding: 15px 22px; font-size: 1rem; }
       .btn.has-sticker { padding-right: 40px; }
     }
+    @media (max-width: 380px) { .status .short { display: none; } }
     @media (prefers-reduced-motion: reduce) {
       html { scroll-behavior: auto; }
       *, *::before, *::after { animation: none !important; transition: none !important; }
@@ -329,7 +335,7 @@
         <div class="group">
           <h3><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3l2.6 5.6 6 .7-4.5 4.1 1.2 6L12 16.9 6.7 19.4l1.2-6L3.4 9.3l6-.7z"/></svg>Points<span class="price">1 point per cent</span></h3>
           <ol class="steps">
-            <li><b>Say your name when you pay.</b> We add the points straight away. Spend $3, get 300.</li>
+            <li><b>Say your name when you pay.</b> We add the points straight away. Spend $3, get 300. Tab buys earn theirs when you pay them off.</li>
             <li><b>Swap them for rewards.</b> Free drinks and money off. Ask at the stall when you've got enough.</li>
             <li><b>Look out for double points days.</b> They show up at the top of this page and on our Discord.</li>
             <li><b>Keep a streak going.</b> Buy something on days we're open to build a streak and earn badges.</li>
@@ -380,16 +386,23 @@
   const RECESS = ['Recess', 660, 675], LUNCH = ['Lunch', 790, 825];
   const SCHEDULE = { 1: [RECESS, LUNCH], 2: [RECESS], 3: [RECESS, LUNCH], 4: [RECESS, LUNCH], 5: [RECESS, LUNCH] };
   const DAY = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
-  const hm = m => String(Math.floor(m / 60)).padStart(2, '0') + ':' + String(m % 60).padStart(2, '0');
+  const hm = m => { const h = Math.floor(m / 60) % 12 || 12; return h + ':' + String(m % 60).padStart(2, '0') + (m < 720 ? 'am' : 'pm'); };
+  /* Days the stall is shut (school holidays, public holidays): ['2026-12-12', '2027-01-31'] ranges, inclusive. */
+  const CLOSED = [];
   const span = n => n < 60 ? n + ' min' : Math.floor(n / 60) + ' h ' + (n % 60) + ' min';
 
   function now() {
     const q = new URLSearchParams(location.search).get('at'); /* ?at=3-13:20 previews a moment: day-HH:MM */
     if (q) { const [d, t] = q.split('-'); const [h, m] = t.split(':').map(Number); return { d: +d, m: h * 60 + m }; }
-    const n = new Date(); return { d: n.getDay(), m: n.getHours() * 60 + n.getMinutes() };
+    /* Always Sydney time, whatever the phone's set to. */
+    const p = Object.fromEntries(new Intl.DateTimeFormat('en-AU', { timeZone: 'Australia/Sydney', weekday: 'short', year: 'numeric', month: '2-digit',
+      day: '2-digit', hour: '2-digit', minute: '2-digit', hourCycle: 'h23' }).formatToParts(new Date()).map(x => [x.type, x.value]));
+    const iso = `${p.year}-${p.month}-${p.day}`;
+    return { d: ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'].indexOf(p.weekday), m: +p.hour * 60 + +p.minute, iso };
   }
 
-  function state({ d, m }) {
+  function state({ d, m, iso }) {
+    if (iso && CLOSED.some(([a, b]) => iso >= a && iso <= (b || a))) return { kind: 'closed', text: '<b>Closed</b><span class="long"> for the holidays</span>' };
     const on = (SCHEDULE[d] || []).find(([, a, b]) => m >= a && m < b);
     if (on) return { kind: 'open', text: `<b>Open</b><span class="long">, ${on[0].toLowerCase()} ends in ${span(on[2] - m)}</span>`, plain: `Open, closes in ${span(on[2] - m)}` };
     for (let k = 0; k < 8; k++) {
@@ -398,7 +411,7 @@
         if (k === 0 && a <= m) continue;
         if (k === 0 && a - m <= 30) return { kind: 'soon', text: `<b>Opens in ${span(a - m)}</b><span class="long"> for ${name.toLowerCase()}</span>` };
         const when = k === 0 ? 'today' : k === 1 ? 'tomorrow' : DAY[dd];
-        return { kind: 'closed', text: `<b>Closed</b><span class="long">, opens ${when} at ${hm(a)}</span>` };
+        return { kind: 'closed', text: `<b>Closed</b><span class="long">, opens ${when} at ${hm(a)}</span><span class="short"> · ${k === 0 ? '' : when.slice(0, 3) + ' '}${hm(a)}</span>` };
       }
     }
     return { kind: 'closed', text: '<b>Closed</b>' };
@@ -455,7 +468,7 @@
   /* Vote. Finishing the poll leads to success.html, which sets has_voted_xyz. */
   const poll = document.getElementById('poll'), votes = document.querySelectorAll('.vote');
   if (localStorage.getItem('has_voted_xyz') === 'true') votes.forEach(b => { b.disabled = true; b.innerHTML = 'You’ve voted, thanks'; });
-  votes.forEach(b => b.addEventListener('click', () => { if (window.Tally) Tally.loadEmbeds(); poll.showModal(); }));
+  votes.forEach(b => b.addEventListener('click', () => { loadTally(); poll.showModal(); }));
   poll.addEventListener('click', e => { if (e.target === poll || e.target.closest('[data-close]')) poll.close(); });
 
   /* What's on. Fizzy (the stall's points system) publishes live rewards and double points days;
@@ -466,7 +479,7 @@
                  double_points: [{ name: 'Double points Friday', multiplier: 2, start: '2026-10-23', end: '2026-10-23', on_now: true }],
                  student_site: 'https://my.cookedcoke.co/' };
   const fmtDay = iso => new Date(iso + 'T12:00:00').toLocaleDateString('en-AU', { weekday: 'short', day: 'numeric', month: 'short' }).replace(',', '');
-  function showPromos(p) {
+  function showPromos(p, late) {
     const items = [];
     for (const e of p.double_points || []) {
       const x = e.multiplier === 2 ? 'Double' : e.multiplier + '×';
@@ -491,6 +504,7 @@
       document.getElementById('promo').append(a);
     }
     const box = document.getElementById('promo');
+    if (late && box.hidden && (scrollY > 0 || performance.now() > 800)) document.querySelector('.hero').after(box);  // don't shove the page down under someone's thumb
     box.hidden = false;
     if (items.some(i => i.hot)) {
       const r = box.getBoundingClientRect();
@@ -499,12 +513,20 @@
   }
   if (new URLSearchParams(location.search).get('promos') === 'demo') showPromos(DEMO);
   else {
-    const ctl = new AbortController(); setTimeout(() => ctl.abort(), 4000);
-    fetch(PROMOS, { signal: ctl.signal, cache: 'no-cache' }).then(r => r.ok ? r.json() : null).then(p => p && showPromos(p)).catch(() => {});
+    const ctl = new AbortController(); setTimeout(() => ctl.abort(), 2500);
+    let cached = null;
+    try { cached = localStorage.getItem('cc-promos'); if (cached) showPromos(JSON.parse(cached)); } catch (e) {}
+    fetch(PROMOS, { signal: ctl.signal, cache: 'no-cache' }).then(r => r.ok ? r.text() : null).then(t => {
+      if (!t || t === cached) return;
+      try { localStorage.setItem('cc-promos', t); } catch (e) {}
+      if (!cached) showPromos(JSON.parse(t), true);
+    }).catch(() => {});
   }
 
-  // Tally embed loader
+  // Tally embed loader: only once someone wants to vote, so it doesn't slow the page for everyone else
+  function loadTally() {
   var d=document,w="https://tally.so/widgets/embed.js",v=function(){"undefined"!=typeof Tally?Tally.loadEmbeds():d.querySelectorAll("iframe[data-tally-src]:not([src])").forEach((function(e){e.src=e.dataset.tallySrc}))};if("undefined"!=typeof Tally)v();else if(d.querySelector('script[src="'+w+'"]')==null){var s=d.createElement("script");s.src=w,s.onload=v,s.onerror=v,d.body.appendChild(s);}
+  }
 </script>
 </body>
 </html>
