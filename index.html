@@ -108,7 +108,7 @@
     }
 
     /* hero */
-    .hero { display: grid; grid-template-columns: 1fr; gap: clamp(32px, 6vw, 72px); align-items: center;
+    .hero { display: grid; grid-template-columns: 1.3fr 1fr; gap: clamp(32px, 6vw, 72px); align-items: center;
             padding: clamp(36px, 6vw, 64px) 0; }
     h1 { font-size: clamp(2.6rem, 6vw, 4.2rem); font-weight: 800; line-height: .98; letter-spacing: -.035em; }
     h1 span { color: var(--red); }
@@ -119,6 +119,15 @@
     .btn small { font-size: var(--t-xs); font-weight: 600; opacity: .85; }
     .btn:hover { transform: translateY(-2px); box-shadow: 0 16px 28px -14px rgba(179,0,0,.8); }
     .btn:active { transform: translateY(1px); box-shadow: 0 6px 14px -10px rgba(179,0,0,.7); }
+    .perk { background: linear-gradient(160deg, var(--card) 45%, var(--red-wash)); border-radius: 28px; box-shadow: var(--shadow-lg);
+            padding: clamp(22px, 3vw, 30px); transform: rotate(1.5deg); }
+    .perk .tag { font-size: var(--t-xs); font-weight: 800; letter-spacing: .08em; text-transform: uppercase; color: var(--red-ink); }
+    .perk .big { font-family: var(--display); font-size: clamp(2.4rem, 5vw, 3.4rem); font-weight: 800; letter-spacing: -.03em; line-height: 1; margin-top: 10px; }
+    .perk .big small { font-size: var(--t-l); color: var(--muted); font-weight: 700; letter-spacing: 0; }
+    .perk ul { list-style: none; margin-top: 18px; border-top: 1px dashed var(--rule); }
+    .perk li { padding: 10px 0; border-bottom: 1px dashed var(--rule); color: var(--muted); }
+    .perk li b { color: var(--ink); }
+    .perk a { display: inline-block; margin-top: 16px; color: var(--red-ink); font-weight: 800; }
     .btn[disabled] { background: var(--card); color: var(--muted); box-shadow: var(--shadow); cursor: default; transform: none; }
 
 
@@ -232,6 +241,7 @@
 
     @media (max-width: 860px) {
       .hero { grid-template-columns: 1fr; }
+      .perk { transform: none; max-width: 460px; }
       .board { grid-template-columns: 1fr; }
     }
     @media (max-width: 480px) {
@@ -272,7 +282,15 @@
         <p class="lede">A student-run tuck shop at Reddam House. Come up at recess, or at lunch any day but Tuesday.</p>
         <button class="btn vote has-sticker" type="button">Vote on what we stock next<span class="sr">, get 10% off</span><span class="sticker" aria-hidden="true">10%<br>off</span></button>
       </div>
-
+      <aside class="perk" aria-label="Points and tabs">
+        <div class="tag">Every time you buy</div>
+        <div class="big">$3 = 300 <small>points</small></div>
+        <ul>
+          <li><b>Swap points</b> for free drinks and money off.</li>
+          <li><b>Regulars get a tab.</b> Buy now, pay within a week.</li>
+        </ul>
+        <a href="#points">How points and tabs work</a>
+      </aside>
     </section>
 
     <section class="menu" aria-labelledby="menuTitle">
@@ -322,10 +340,10 @@
           <ol class="steps">
             <li><b>Buy now, pay later.</b> Put a drink on your tab and pay it off at the stall within a week.</li>
             <li><b>Unlock it.</b> Spend $30 with us and get your tab score to 60, then ask at the stall to switch it on.</li>
-            <li><b>Your limit grows.</b> It starts small and goes up as your tab score does.</li>
+            <li><b>Your limit depends on your score.</b> It starts small and goes up as your tab score does.</li>
             <li><b>Pay on time.</b> If a payment's late, your tab pauses until it's paid and your score drops.</li>
           </ol>
-          <p class="note"><b>Your tab score</b> is out of 100. It goes up when you spend with us, come back on different days and pay on time, and down when you pay late.</p>
+          <p class="note"><b>Your tab score</b> is out of 100. It goes up when you spend with us, come back on different days and pay on time, and down when you pay late or leave money owing.</p>
         </div>
       </div>
       <div class="shelf mine">
