@@ -293,7 +293,7 @@
         <div class="big">$3 = 300 <small>points</small></div>
         <ul>
           <li><b>Swap points</b> for free drinks and money off.</li>
-          <li><b>Regulars get a tab.</b> Buy now, pay within a week.</li>
+          <li><b>Regulars get a tab.</b> Buy now, pay within <span data-rule="due-words">a week</span>.</li>
         </ul>
         <a href="#points">How points and tabs work</a>
       </aside>
@@ -342,10 +342,10 @@
           </ol>
         </div>
         <div class="group">
-          <h3><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="5.5" width="18" height="13" rx="2.5"/><path d="M3 10h18M7 14.5h4"/></svg>Tabs<span class="price">Pay within 7 days</span></h3>
+          <h3><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="5.5" width="18" height="13" rx="2.5"/><path d="M3 10h18M7 14.5h4"/></svg>Tabs<span class="price">Pay within <span data-rule="due">7</span> days</span></h3>
           <ol class="steps">
-            <li><b>Buy now, pay later.</b> Put a drink on your tab and pay it off at the stall within a week.</li>
-            <li><b>Unlock it.</b> Spend $30 with us and get your tab score to 60, then ask at the stall to switch it on.</li>
+            <li><b>Buy now, pay later.</b> Put a drink on your tab and pay it off at the stall within <span data-rule="due-words">a week</span>.</li>
+            <li><b>Unlock it.</b> Spend <span data-rule="spend">$30</span> with us and get your tab score to <span data-rule="score">60</span>, then ask at the stall to switch it on.</li>
             <li><b>Your limit depends on your score.</b> It starts small and goes up as your tab score does.</li>
             <li><b>Pay on time.</b> If a payment's late, your tab pauses until it's paid and your score drops.</li>
           </ol>
@@ -387,8 +387,8 @@
   const SCHEDULE = { 1: [RECESS, LUNCH], 2: [RECESS], 3: [RECESS, LUNCH], 4: [RECESS, LUNCH], 5: [RECESS, LUNCH] };
   const DAY = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
   const hm = m => { const h = Math.floor(m / 60) % 12 || 12; return h + ':' + String(m % 60).padStart(2, '0') + (m < 720 ? 'am' : 'pm'); };
-  /* Days the stall is shut (school holidays, public holidays): ['2026-12-12', '2027-01-31'] ranges, inclusive. */
-  const CLOSED = [];
+  /* Days the stall is shut: set in Fizzy (Settings, Closed days) and sent with promos.json. */
+  let CLOSED = [];
   const span = n => n < 60 ? n + ' min' : Math.floor(n / 60) + ' h ' + (n % 60) + ' min';
 
   function now() {
@@ -402,7 +402,8 @@
   }
 
   function state({ d, m, iso }) {
-    if (iso && CLOSED.some(([a, b]) => iso >= a && iso <= (b || a))) return { kind: 'closed', text: '<b>Closed</b><span class="long"> for the holidays</span>' };
+    const shut = iso && CLOSED.find(([a, b]) => iso >= a && iso <= (b || a));
+    if (shut) return { kind: 'closed', text: '<b>Closed</b><span class="long"> ' + (shut[2] ? 'for ' + esc(shut[2]) : 'today') + '</span>' };
     const on = (SCHEDULE[d] || []).find(([, a, b]) => m >= a && m < b);
     if (on) return { kind: 'open', text: `<b>Open</b><span class="long">, ${on[0].toLowerCase()} ends in ${span(on[2] - m)}</span>`, plain: `Open, closes in ${span(on[2] - m)}` };
     for (let k = 0; k < 8; k++) {
@@ -417,6 +418,16 @@
     return { kind: 'closed', text: '<b>Closed</b>' };
   }
 
+  const esc = t => String(t).replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' })[c]);
+  /* Live numbers from Fizzy, so this page can't drift from the real rules. */
+  function applyRules(p) {
+    if (Array.isArray(p.closed)) { CLOSED = p.closed.map(c => [c.start, c.end, c.label]); render(); }
+    const r = p.rules; if (!r) return;
+    const set = (k, v) => document.querySelectorAll(`[data-rule="${k}"]`).forEach(el => { el.textContent = v; });
+    if (r.unlock_spend_cents >= 0) set('spend', '$' + (r.unlock_spend_cents / 100).toLocaleString('en-AU', { maximumFractionDigits: 2 }));
+    if (r.score_needed >= 0) set('score', r.score_needed);
+    if (r.due_days > 0) { set('due', r.due_days); set('due-words', r.due_days === 7 ? 'a week' : r.due_days + ' days'); }
+  }
   function render() {
     const t = now(), s = state(t), el = document.getElementById('status');
     el.dataset.state = s.kind;
@@ -515,10 +526,11 @@
   else {
     const ctl = new AbortController(); setTimeout(() => ctl.abort(), 2500);
     let cached = null;
-    try { cached = localStorage.getItem('cc-promos'); if (cached) showPromos(JSON.parse(cached)); } catch (e) {}
+    try { cached = localStorage.getItem('cc-promos'); if (cached) { applyRules(JSON.parse(cached)); showPromos(JSON.parse(cached)); } } catch (e) {}
     fetch(PROMOS, { signal: ctl.signal, cache: 'no-cache' }).then(r => r.ok ? r.text() : null).then(t => {
       if (!t || t === cached) return;
       try { localStorage.setItem('cc-promos', t); } catch (e) {}
+      applyRules(JSON.parse(t));
       if (!cached) showPromos(JSON.parse(t), true);
     }).catch(() => {});
   }
